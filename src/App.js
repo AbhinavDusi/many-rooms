@@ -1,7 +1,12 @@
 import React, {Component, Fragment} from 'react'; 
 import Navbar from './Navbar'; 
 import OptionsPanel from './OptionsPanel'; 
+import AboutScreen from './Screens/AboutScreen'; 
 import ChatBoxScreen from './Screens/ChatBoxScreen'; 
+import FloorScreen from './Screens/FloorScreen'; 
+import HomeScreen from './Screens/HomeScreen'; 
+import ProfileScreen from './Screens/ProfileScreen'; 
+import SettingsScreen from './Screens/SettingsScreen'; 
 
 export default class App extends Component {
   getScreen = () => {
