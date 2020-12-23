@@ -25,7 +25,7 @@ export default class Navbar extends Component {
                 <img src = {logo} alt = 'Logo' style = {imgStyle} />
                 <NavbarOption value = 'HOME'/> 
                 <NavbarOption value = 'ABOUT'/>
-                <NavbarOption value = 'ACCOUNT'/>
+                <NavbarOption value = 'PROFILE'/>
                 <NavbarOption value = 'SETTINGS'/> 
                 <NavbarOption value = 'SUPPORT'/>
             </div>

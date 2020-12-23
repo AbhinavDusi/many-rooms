@@ -1,7 +1,7 @@
 import React, {Component, Fragment} from 'react'; 
 import Navbar from './Navbar'; 
 import OptionsPanel from './OptionsPanel'; 
-import ChatBox from './ChatBox'; 
+import ChatBoxScreen from './Screens/ChatBoxScreen'; 
 
 export default class App extends Component {
   render() {
@@ -17,7 +17,7 @@ export default class App extends Component {
         <Navbar />
         <div style = {divStyle}>
           <OptionsPanel />
-          <ChatBox />
+          <ChatBoxScreen />
         </div>
       </Fragment>
     );

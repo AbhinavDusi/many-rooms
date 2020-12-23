@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 
-export default class ChatBox extends Component {
+export default class ChatBoxScreen extends Component {
     render() {
         const divStyle = {
             float: 'right',
