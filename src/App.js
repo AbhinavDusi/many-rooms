@@ -4,12 +4,16 @@ import OptionsPanel from './OptionsPanel';
 import ChatBoxScreen from './Screens/ChatBoxScreen'; 
 
 export default class App extends Component {
+  getScreen = () => {
+    return <ChatBoxScreen />
+  }
+
   render() {
     const divStyle = {
       width: '100%',
       height: 'calc(100% - 60px)',
       display: 'inline-block',
-      paddingTop:'60px'
+      paddingTop: '60px'
     };
 
     return (
@@ -17,7 +21,7 @@ export default class App extends Component {
         <Navbar />
         <div style = {divStyle}>
           <OptionsPanel />
-          <ChatBoxScreen />
+          {this.getScreen}
         </div>
       </Fragment>
     );
