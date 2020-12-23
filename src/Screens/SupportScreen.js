@@ -10,7 +10,7 @@ export default class SupportScreen extends Component {
 
         return (
             <div style = {outerDivStyle}>
-                Create Room Screen
+                Support Screen
             </div>
         );
     }

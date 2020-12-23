@@ -10,7 +10,7 @@ export default class SettingsScreen extends Component {
 
         return (
             <div style = {outerDivStyle}>
-                Create Room Screen
+                Settings Screen
             </div>
         );
     }

@@ -10,8 +10,34 @@ import SettingsScreen from './Screens/SettingsScreen';
 import SupportScreen from './Screens/SupportScreen';
 
 export default class App extends Component {
-  getScreen = () => {
-    return <HomeScreen />
+  state = {
+    screenToLoad: <HomeScreen />
+  }
+
+  componentDidMount() {
+    fetch(window.location.pathname)
+      .then(res => res.json())
+      .then(
+        res => {
+          const screenLoadNumber = res.screenToLoad; 
+          let screenToLoad = <HomeScreen />; 
+          switch (screenLoadNumber) {
+            case 0:
+              screenToLoad = <HomeScreen />;
+              break;
+            case 1:
+              screenToLoad = <ProfileScreen />;
+              break;
+            case 2:
+              screenToLoad = <SettingsScreen />;
+              break;
+            case 3:
+              screenToLoad = <SupportScreen />;
+              break;
+          }
+          this.setState({screenToLoad});
+        }
+      ); 
   }
 
   render() {
@@ -27,7 +53,7 @@ export default class App extends Component {
         <Navbar />
         <div style = {divStyle}>
           <OptionsPanel />
-          {this.getScreen()}
+          {this.state.screenToLoad}
         </div>
       </Fragment>
     );

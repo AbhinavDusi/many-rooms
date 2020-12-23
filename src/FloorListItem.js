@@ -5,6 +5,10 @@ export default class FloorListItem extends Component {
         pStyle: {
             fontFamily: 'Quicksand',
             paddingLeft: '40px'
+        },
+        aStyle: {
+            textDecoration: 'none',
+            color: 'black'
         }
     }
 
@@ -20,15 +24,26 @@ export default class FloorListItem extends Component {
         this.setState({pStyle}); 
     }
 
+    componentDidMount() {
+        const pStyle = {...this.state.pStyle}; 
+        pStyle.fontWeight = 'normal'; 
+        this.setState({pStyle});
+    }
+
     render() {
         return (
             <p 
-                style = {{...this.props.floorItem.weightStyle, ...this.state.pStyle}}
+                style = {this.state.pStyle}
                 onMouseEnter = {this.handleMouseEnter}
                 onMouseLeave = {this.handleMouseLeave}
                 onMouseDown = {() => this.props.onSelect(this.props.floorItem)}
             >
-                {this.props.floorItem.name}
+                <a 
+                    href = {`/f/${this.props.floorItem.name.toLowerCase().replace(/\s/g, '')}`}
+                    style = {this.state.aStyle}
+                >
+                    {this.props.floorItem.name}
+                </a>
             </p>
         );
     }
