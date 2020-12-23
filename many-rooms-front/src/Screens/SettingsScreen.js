@@ -1,16 +1,16 @@
 import React, { Component } from 'react';
+import { outerDivStyle, innerDivStyle, mainHeader, secondaryHeader, infoText } from './ScreenStyles';
 
 export default class SettingsScreen extends Component {
     render() {
-        const outerDivStyle = {
-            float: 'right',
-            height: '100%',
-            width: '85%'
-        }
-
         return (
             <div style = {outerDivStyle}>
-                Settings Screen
+                <div style = {innerDivStyle}>
+                    <p style = {mainHeader}>Adjust your Settings</p>
+                    <p style = {infoText}>Change Display Name</p>
+                    <p style = {infoText}>Change Email</p>
+                    <p style = {infoText}>Change Password</p>
+                </div>
             </div>
         );
     }

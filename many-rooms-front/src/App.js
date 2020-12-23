@@ -15,29 +15,25 @@ export default class App extends Component {
   }
 
   componentDidMount() {
-    fetch(window.location.pathname)
-      .then(res => res.json())
-      .then(
-        res => {
-          const screenLoadNumber = res.screenToLoad; 
-          let screenToLoad = <HomeScreen />; 
-          switch (screenLoadNumber) {
-            case 0:
-              screenToLoad = <HomeScreen />;
-              break;
-            case 1:
-              screenToLoad = <ProfileScreen />;
-              break;
-            case 2:
-              screenToLoad = <SettingsScreen />;
-              break;
-            case 3:
-              screenToLoad = <SupportScreen />;
-              break;
-          }
-          this.setState({screenToLoad});
-        }
-      ); 
+    let screenToLoad;
+    switch(window.location.pathname) {
+      case '/home':
+        screenToLoad = <HomeScreen />;
+        break;
+      case '/profile':
+        screenToLoad = <ProfileScreen />;
+        break;
+      case '/settings':
+        screenToLoad = <SettingsScreen />;
+        break;
+      case '/support':
+        screenToLoad = <SupportScreen />;
+        break;
+      default:
+        screenToLoad = <HomeScreen />;
+        break;
+    }
+    this.setState({screenToLoad});
   }
 
   render() {

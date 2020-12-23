@@ -1,15 +1,17 @@
 import React, { Component } from 'react';
+import { outerDivStyle, innerDivStyle, mainHeader, secondaryHeader, infoText } from './ScreenStyles';
 
-export default class ChatBoxScreen extends Component {
+export default class ProfileScreen extends Component {
     render() {
-        const divStyle = {
-            float: 'right',
-            height: '100%',
-            width: '85%',
-        }
-
         return (
-            <div style = {divStyle}>Profile Screen</div>
+            <div style = {outerDivStyle}>
+                <div style = {innerDivStyle}>
+                    <p style = {mainHeader}>Your Profile</p>
+                    <p style = {infoText}>Your Rooms</p>
+                    <p style = {infoText}>Your Liked Rooms</p>
+                    <p style = {infoText}>Your Friends</p>
+                </div>
+            </div>
         );
     }
 }

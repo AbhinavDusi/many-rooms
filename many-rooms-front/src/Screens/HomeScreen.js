@@ -1,32 +1,8 @@
 import React, { Component } from 'react'; 
+import { outerDivStyle, innerDivStyle, mainHeader, secondaryHeader, infoText } from './ScreenStyles';
 
 export default class ChatBoxScreen extends Component {
     render() {
-        const outerDivStyle = {
-            float: 'right',
-            height: '100%',
-            width: '85%'
-        }
-
-        const innerDivStyle = {
-            margin: '50px',
-            fontFamily: 'Quicksand'
-        }
-
-        const mainHeader = {
-            fontSize: '70px',
-            lineHeight: '0px'
-        }
-
-        const secondaryHeader = {
-            fontSize: '60px',
-            lineHeight: '0px'
-        }
-
-        const infoText = {
-            fontSize: '25px'
-        }
-
         return (
             <div style = {outerDivStyle}>
                 <div style = {innerDivStyle}>
