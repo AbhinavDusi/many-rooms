@@ -23,10 +23,11 @@ export default class Navbar extends Component {
         return (
             <div style = {divStyle}>
                 <img src = {logo} alt = 'Logo' style = {imgStyle} />
-                <NavbarOption value = 'HOME'/>
+                <NavbarOption value = 'HOME'/> 
                 <NavbarOption value = 'ABOUT'/>
-                <NavbarOption value = 'SUPPORT'/>
                 <NavbarOption value = 'ACCOUNT'/>
+                <NavbarOption value = 'SETTINGS'/> 
+                <NavbarOption value = 'SUPPORT'/>
             </div>
         );
     }
