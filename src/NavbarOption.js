@@ -11,10 +11,6 @@ export default class NavbarOption extends Component {
             fontSize: '25px',
             fontFamily: 'Quicksand',
             textDecoration: 'none'
-        },
-        aStyle: {
-            textDecoration: 'none',
-            color: 'white'
         }
     }
 
@@ -37,11 +33,7 @@ export default class NavbarOption extends Component {
                 onMouseEnter = {this.handleMouseEnter}
                 onMouseLeave = {this.handleMouseLeave}
             >
-                <a 
-                    href = {`/${this.props.value.toLowerCase()}`}
-                    style = {this.state.aStyle}>
-                    {this.props.value}
-                </a>
+                {this.props.value}
             </div>
         );
     }

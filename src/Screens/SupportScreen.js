@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 
-export default class SettingsScreen extends Component {
+export default class SupportScreen extends Component {
     render() {
         const outerDivStyle = {
             float: 'right',

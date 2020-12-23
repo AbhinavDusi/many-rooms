@@ -2,14 +2,16 @@ import React, { Component } from 'react';
 
 export default class ChatBoxScreen extends Component {
     render() {
-        const divStyle = {
+        const outerDivStyle = {
             float: 'right',
             height: '100%',
-            width: '85%',
+            width: '85%'
         }
 
         return (
-            <div style = {divStyle}>Floor Screen</div>
+            <div style = {outerDivStyle}>
+                Create Room Screen
+            </div>
         );
     }
 }

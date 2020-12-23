@@ -1,16 +1,17 @@
 import React, {Component, Fragment} from 'react'; 
 import Navbar from './Navbar'; 
 import OptionsPanel from './OptionsPanel'; 
-import AboutScreen from './Screens/AboutScreen'; 
 import ChatBoxScreen from './Screens/ChatBoxScreen'; 
+import CreateRoomScreen from './Screens/CreateRoomScreen';
 import FloorScreen from './Screens/FloorScreen'; 
 import HomeScreen from './Screens/HomeScreen'; 
 import ProfileScreen from './Screens/ProfileScreen'; 
-import SettingsScreen from './Screens/SettingsScreen'; 
+import SettingsScreen from './Screens/SettingsScreen';
+import SupportScreen from './Screens/SupportScreen';
 
 export default class App extends Component {
   getScreen = () => {
-    return <ChatBoxScreen />
+    return <HomeScreen />
   }
 
   render() {
@@ -26,7 +27,7 @@ export default class App extends Component {
         <Navbar />
         <div style = {divStyle}>
           <OptionsPanel />
-          {this.getScreen}
+          {this.getScreen()}
         </div>
       </Fragment>
     );

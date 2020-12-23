@@ -6,10 +6,11 @@ export default class ChatBoxScreen extends Component {
             float: 'right',
             height: '100%',
             width: '85%',
+            color:'black'
         }
 
         return (
-            <div style = {divStyle}></div>
+            <div style = {divStyle}>Chat Box Screen</div>
         );
     }
 }
