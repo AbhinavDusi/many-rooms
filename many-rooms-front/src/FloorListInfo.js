@@ -1,0 +1,21 @@
+export const floorList = [
+    {name: 'Anime', url: 'anime'},
+    {name: 'Art', url: 'art'},
+    {name: 'Culture', url: 'culture'},
+    {name: 'Fitness', url: 'fitness'},
+    {name: 'Food', url: 'food'},
+    {name: 'History', url: 'history'},
+    {name: 'Humor', url: 'humor'},
+    {name: 'International', url: 'international'},
+    {name: 'Literature', url: 'literature'},
+    {name: 'Miscellanous', url: 'miscellaneous'},
+    {name: 'Movies and TV', url: 'moviesandtv'},
+    {name: 'Music', url: 'music'},
+    {name: 'Nature and Wildlife', url: 'natureandwildlife'},
+    {name: 'Politics', url: 'politics'},
+    {name: 'Religion', url: 'religion'},
+    {name: 'Science', url: 'science'},
+    {name: 'Sports', url: 'sports'},
+    {name: 'Technology', url: 'technology'},
+    {name: 'Video Games', url: 'videogames'}
+]; 
