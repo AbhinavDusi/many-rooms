@@ -1,15 +1,16 @@
 import React, { Component } from 'react';
+import { outerDivStyle } from './ScreenStyles';
 
 export default class ChatBoxScreen extends Component {
-    render() {
-        const divStyle = {
-            float: 'right',
-            height: '100%',
-            width: '85%',
-        }
+    state = {
+        rooms: [
 
+        ]
+    }
+
+    render() {
         return (
-            <div style = {divStyle}>Floor Screen</div>
+            <div style = {outerDivStyle}>Floor Screen</div>
         );
     }
 }

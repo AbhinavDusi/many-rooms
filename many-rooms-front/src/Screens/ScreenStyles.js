@@ -22,3 +22,36 @@ export const secondaryHeader = {
 export const infoText = {
     fontSize: '25px'
 }
+
+export const textAreaStyle = {
+    fontFamily: 'Quicksand',
+    resize: 'none',
+    width: '100%',
+    height: '250px',
+    backgroundColor:'#f2f2f2',
+    border: 'none'
+}
+
+export const inputTextStyle = {
+    backgroundColor: '#f2f2f2',
+    width: '25%',
+    border: 'none',
+    height:'30px',
+    fontFamily:'Quicksand',
+    fontSize:'25px'
+}
+
+export const tertiaryHeader = {
+    fontSize: '35px',
+    lineHeight: '0px'
+}
+
+export const buttonStyle = {
+    width:'200px',
+    height:'30px',
+    color:'white',
+    backgroundColor: 'black',
+    border:'none',
+    fontSize:'15px',
+    boxShadow: '3px 3px 8px gray'
+}

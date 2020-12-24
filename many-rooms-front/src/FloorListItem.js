@@ -24,9 +24,18 @@ export default class FloorListItem extends Component {
         this.setState({pStyle}); 
     }
 
+    getThisURL = () => {
+        return this.props.floorItem.name.toLowerCase().replace(/\s/g, ''); 
+    }
+
     componentDidMount() {
         const pStyle = {...this.state.pStyle}; 
-        pStyle.fontWeight = 'normal'; 
+        const split = window.location.pathname.split('/'); 
+        if (split[2] === this.getThisURL()) {
+            pStyle.fontWeight = 'bold';
+        } else {
+            pStyle.fontWeight = 'normal';
+        }
         this.setState({pStyle});
     }
 
@@ -39,7 +48,7 @@ export default class FloorListItem extends Component {
                 onMouseDown = {() => this.props.onSelect(this.props.floorItem)}
             >
                 <a 
-                    href = {`/f/${this.props.floorItem.name.toLowerCase().replace(/\s/g, '')}`}
+                    href = {`/f/${this.getThisURL()}`}
                     style = {this.state.aStyle}
                 >
                     {this.props.floorItem.name}

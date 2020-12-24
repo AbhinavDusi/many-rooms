@@ -16,18 +16,22 @@ export default class App extends Component {
 
   componentDidMount() {
     let screenToLoad;
-    switch(window.location.pathname) {
-      case '/home':
+    const split = window.location.pathname.split('/'); 
+    switch(split[1]) {
+      case 'home':
         screenToLoad = <HomeScreen />;
         break;
-      case '/profile':
+      case 'profile':
         screenToLoad = <ProfileScreen />;
         break;
-      case '/settings':
+      case 'settings':
         screenToLoad = <SettingsScreen />;
         break;
-      case '/support':
+      case 'support':
         screenToLoad = <SupportScreen />;
+        break;
+      case 'f':
+        screenToLoad = <FloorScreen />
         break;
       default:
         screenToLoad = <HomeScreen />;

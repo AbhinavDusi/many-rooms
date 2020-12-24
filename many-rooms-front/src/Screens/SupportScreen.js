@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { outerDivStyle, innerDivStyle, mainHeader, secondaryHeader, infoText } from './ScreenStyles';
+import { outerDivStyle, innerDivStyle, mainHeader, infoText, textAreaStyle, buttonStyle } from './ScreenStyles';
 
 export default class SupportScreen extends Component {
     state = {
@@ -26,17 +26,19 @@ export default class SupportScreen extends Component {
             <div style = {outerDivStyle}>
                 <div style = {innerDivStyle}>
                     <p style = {mainHeader}>Need Help?</p>
-                    <p style = {infoText}>Contact our support team to inform us on bugs, make suggestions,
-                    or file reports. Or, you can email us directly at&nbsp;
-                    <a 
-                        href = {"mailto:support@manyrooms.com"}
-                        style = {this.state.aStyle}
-                        onMouseEnter = {this.handleMouseEnter}
-                        onMouseLeave = {this.handleMouseLeave}
-                    >
-                        support@manyrooms.com
-                    </a>.
+                    <p style = {infoText}>Contact our support team to inform us on bugs or make suggestions. 
+                    Or, you can email us directly at&nbsp;
+                        <a 
+                            href = {"mailto:support@manyrooms.com"}
+                            style = {this.state.aStyle}
+                            onMouseEnter = {this.handleMouseEnter}
+                            onMouseLeave = {this.handleMouseLeave}
+                        >
+                            support@manyrooms.com
+                        </a>.
                     </p>
+                    <textarea style = {textAreaStyle}></textarea>
+                    <button style = {{marginTop: '15px', ...buttonStyle}}>Send</button>
                 </div>
             </div>
         );
