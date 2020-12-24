@@ -8,6 +8,7 @@ import HomeScreen from './Screens/HomeScreen';
 import ProfileScreen from './Screens/ProfileScreen'; 
 import SettingsScreen from './Screens/SettingsScreen';
 import SupportScreen from './Screens/SupportScreen';
+import {floorList} from './FloorListInfo'; 
 
 export default class App extends Component {
   state = {
@@ -31,7 +32,9 @@ export default class App extends Component {
         screenToLoad = <SupportScreen />;
         break;
       case 'f':
-        screenToLoad = <FloorScreen />
+        screenToLoad = <FloorScreen floor = {floorList.filter(
+          floor => floor.url === split[2]
+        )[0].name}/>
         break;
       default:
         screenToLoad = <HomeScreen />;
