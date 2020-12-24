@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+
 import { innerDivStyle, outerDivStyle, secondaryHeader } from './ScreenStyles';
 
 export default class FloorScreen extends Component {

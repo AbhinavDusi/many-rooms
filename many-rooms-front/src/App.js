@@ -8,18 +8,10 @@ import HomeScreen from './Screens/HomeScreen';
 import ProfileScreen from './Screens/ProfileScreen'; 
 import SettingsScreen from './Screens/SettingsScreen';
 import SupportScreen from './Screens/SupportScreen';
-import {floorList} from './FloorListInfo';
 
 export default class App extends Component {
   state = {
     screenToLoad: <HomeScreen />
-  }
-
-  handleSelection = selection => {
-    console.log('Selection handled'); 
-    let chosenFloor = this.state.chosenFloor; 
-    chosenFloor = selection;
-    this.setState({chosenFloor});
   }
 
   componentDidMount() {
@@ -39,13 +31,10 @@ export default class App extends Component {
         screenToLoad = <SupportScreen />;
         break;
       case 'f':
-        screenToLoad = <FloorScreen floor = {floorList.filter(floor => 
-          floor.url === split[2])[0].name
-        }/>
+        screenToLoad = <FloorScreen />
         break;
       default:
         screenToLoad = <HomeScreen />;
-        this.handleSelection(null); 
         break;
     }
     this.setState({screenToLoad});
