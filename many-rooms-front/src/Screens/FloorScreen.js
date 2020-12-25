@@ -1,10 +1,11 @@
 import React, { Component } from 'react';
-
-import { innerDivStyle, outerDivStyle, secondaryHeader } from './ScreenStyles';
+import { innerDivStyle, mainHeader, outerDivStyle, boxWrapper } from './ScreenStyles';
+import Box from './Box';
 
 export default class FloorScreen extends Component {
     state = {
-        rooms: []
+        rooms: [],
+        startBox: 0
     }
 
     componentDidMount() {
@@ -15,7 +16,22 @@ export default class FloorScreen extends Component {
         return (
             <div style = {outerDivStyle}>
                 <div style = {innerDivStyle}>
-                    <p style = {secondaryHeader}>{this.props.floor}</p>
+                    <p style = {mainHeader}>{this.props.floor}</p>
+                    <div style = {boxWrapper}>
+                        <Box />
+                        <Box />
+                        <Box />
+                        <Box />
+                        <Box />
+                        <Box />
+                        <Box />
+                        <Box />
+                        <Box />
+                        <Box />
+                        <Box />
+                        <Box />
+                        <Box />
+                    </div>
                 </div>
             </div>
         );

@@ -50,7 +50,12 @@ export const buttonStyle = {
     width:'200px',
     height:'30px',
     color:'black',
-    backgroundColor: '#f2f2f2',
+    backgroundColor: 'white',
     border:'2px solid black',
     fontSize:'15px'
+}
+
+export const boxWrapper = {
+    display: 'inline-block',
+    width:'85%'
 }

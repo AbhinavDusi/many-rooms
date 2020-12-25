@@ -16,7 +16,7 @@ export default class App extends Component {
   }
 
   componentDidMount() {
-    let screenToLoad;
+    let screenToLoad = <HomeScreen />;
     const split = window.location.pathname.split('/'); 
     switch(split[1]) {
       case 'home':
@@ -32,10 +32,11 @@ export default class App extends Component {
         screenToLoad = <SupportScreen />;
         break;
       case 'f':
-        screenToLoad = <FloorScreen floor = {floorList.filter(
-          floor => floor.url === split[2]
-        )[0].name}/>
-        break;
+        const floor = floorList.filter(floor => floor.url === split[2]);
+        if (floor.length === 1) {
+          screenToLoad = <FloorScreen floor = {floor[0].name}/>
+          break;
+        }
       default:
         screenToLoad = <HomeScreen />;
         break;
