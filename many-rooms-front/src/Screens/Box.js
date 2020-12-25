@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { boxTextStyle, innerBoxWrapper } from './ScreenStyles'; 
 
 export default class Box extends Component {
     state = {
@@ -26,16 +27,6 @@ export default class Box extends Component {
         this.setState({boxStyle});
     }
 
-    pStyle = {
-        lineHeight: '1em',
-        fontSize:'10px',
-        marginBottom: '-0.8em'
-    }
-
-    innerBoxWrapper = {
-        paddingLeft: '5px'
-    }
-
     render() {
         return (
             <div 
@@ -43,12 +34,12 @@ export default class Box extends Component {
                 onMouseEnter = {this.handleMouseEnter}
                 onMouseLeave = {this.handleMouseLeave}
             >
-                <div style = {this.innerBoxWrapper}>
-                    <p style = {this.pStyle}>ID: 0001</p>
-                    <p style = {this.pStyle}>Attendees: 23</p>
-                    <p style = {this.pStyle}>Posts: 230</p>
-                    <p style = {this.pStyle}>Host: Sample_User#0001</p>
-                    <p style = {this.pStyle}>Title: This is a very very long sample Topic</p>
+                <div style = {innerBoxWrapper}>
+                    <p style = {boxTextStyle}>ID: 0001</p>
+                    <p style = {boxTextStyle}>Attendees: 23</p>
+                    <p style = {boxTextStyle}>Posts: 230</p>
+                    <p style = {boxTextStyle}>Host: Sample_User#0001</p>
+                    <p style = {boxTextStyle}>Title: This is a very long sample topic</p>
                 </div>
             </div>
         );

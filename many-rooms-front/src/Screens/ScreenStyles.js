@@ -59,3 +59,13 @@ export const boxWrapper = {
     display: 'inline-block',
     width:'85%'
 }
+
+boxTextStyle = {
+    lineHeight: '1em',
+    fontSize:'10px',
+    marginBottom: '-0.8em'
+}
+
+innerBoxWrapper = {
+    paddingLeft: '5px'
+}
