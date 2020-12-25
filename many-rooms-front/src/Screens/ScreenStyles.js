@@ -60,12 +60,17 @@ export const boxWrapper = {
     width:'85%'
 }
 
-boxTextStyle = {
+export const boxTextStyle = {
     lineHeight: '1em',
     fontSize:'10px',
-    marginBottom: '-0.8em'
+    marginBottom: '-0.8em',
+    marginLeft: '5px'
 }
 
-innerBoxWrapper = {
-    paddingLeft: '5px'
+export const innerBoxWrapper = {
+    width: '100%',
+    height: '100%',
+    border: 'none',
+    textAlign: 'left',
+    verticalAlign: 'bottom'
 }

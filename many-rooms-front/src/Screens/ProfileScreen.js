@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { outerDivStyle, innerDivStyle, mainHeader, infoText, boxWrapper } from './ScreenStyles';
-import Box from './Box';
+import PartyBox from './PartyBox';
+import FriendBox from './FriendBox';
 
 export default class ProfileScreen extends Component {
     state = {
@@ -20,15 +21,15 @@ export default class ProfileScreen extends Component {
                     <p style = {mainHeader}>Sample_User#0001's Room</p>
                     <p style = {infoText}>Previous Parties</p>
                     <div style = {boxWrapper}>
-                        <Box />
+                        <PartyBox id = '000001'/>
                     </div>
                     <p style = {infoText}>Archived Parties</p>
                     <div style = {boxWrapper}>
-                        <Box />
+                        <PartyBox id = '0001'/>
                     </div>
                     <p style = {infoText}>Friends</p>
                     <div style = {boxWrapper}>
-                        <Box />
+                        <FriendBox />
                     </div>
                 </div>
             </div>

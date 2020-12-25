@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import { boxTextStyle, innerBoxWrapper } from './ScreenStyles'; 
 
 export default class Box extends Component {
     state = {
@@ -34,13 +33,7 @@ export default class Box extends Component {
                 onMouseEnter = {this.handleMouseEnter}
                 onMouseLeave = {this.handleMouseLeave}
             >
-                <div style = {innerBoxWrapper}>
-                    <p style = {boxTextStyle}>ID: 0001</p>
-                    <p style = {boxTextStyle}>Attendees: 23</p>
-                    <p style = {boxTextStyle}>Posts: 230</p>
-                    <p style = {boxTextStyle}>Host: Sample_User#0001</p>
-                    <p style = {boxTextStyle}>Title: This is a very long sample topic</p>
-                </div>
+                Empty Box
             </div>
         );
     }

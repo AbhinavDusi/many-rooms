@@ -32,11 +32,19 @@ export default class App extends Component {
         screenToLoad = <SupportScreen />;
         break;
       case 'f':
-        const floor = floorList.filter(floor => floor.url === split[2]);
-        if (floor.length === 1) {
-          screenToLoad = <FloorScreen floor = {floor[0].name}/>
-          break;
+        if (split.length === 4) {
+          if (split[3] === 'create') {
+            screenToLoad = <CreateRoomScreen />
+          } else if (split[3] === 'party') {
+            screenToLoad = <ChatBoxScreen />
+          }
+        } else {
+          const floor = floorList.filter(floor => floor.url === split[2]);
+          if (floor.length === 1) {
+            screenToLoad = <FloorScreen floor = {floor[0].name} floorURL = {'/f/' + floor[0].url}/>
+          }
         }
+        break;
       default:
         screenToLoad = <HomeScreen />;
         break;
