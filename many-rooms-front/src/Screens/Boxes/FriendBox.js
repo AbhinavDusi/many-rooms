@@ -1,6 +1,6 @@
 import React from 'react';
 import Box from './Box';
-import {innerBoxWrapper, boxTextStyle} from './ScreenStyles';
+import {innerBoxWrapper, boxTextStyle} from '../ScreenStyles';
 
 export default class FriendBox extends Box {
     render() { 

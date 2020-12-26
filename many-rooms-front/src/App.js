@@ -8,6 +8,7 @@ import HomeScreen from './Screens/HomeScreen';
 import ProfileScreen from './Screens/ProfileScreen'; 
 import SettingsScreen from './Screens/SettingsScreen';
 import SupportScreen from './Screens/SupportScreen';
+import ErrorScreen from './Screens/ErrorScreen';
 import {floorList} from './FloorListInfo'; 
 
 export default class App extends Component {
@@ -16,7 +17,7 @@ export default class App extends Component {
   }
 
   componentDidMount() {
-    let screenToLoad = <HomeScreen />;
+    let screenToLoad = <ErrorScreen />;
     const split = window.location.pathname.split('/'); 
     switch(split[1]) {
       case 'home':
@@ -47,7 +48,7 @@ export default class App extends Component {
         }
         break;
       default:
-        screenToLoad = <HomeScreen />;
+        screenToLoad = <ErrorScreen />;
         break;
     }
     this.setState({screenToLoad});
