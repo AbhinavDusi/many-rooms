@@ -15,7 +15,7 @@ export default class PartyBox extends Box {
                 onMouseLeave = {this.handleMouseLeave}
             >
                 <div style = {innerBoxWrapper} onClick = {() => 
-                    window.location.pathname = this.getPartyURL(this.props.id) + '/party'
+                    window.location.pathname = '/p'
                 }>
                     <p style = {boxTextStyle}>ID: 0001</p>
                     <p style = {boxTextStyle}>Attendees: 23</p>

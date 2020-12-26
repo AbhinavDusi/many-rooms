@@ -57,7 +57,8 @@ export const buttonStyle = {
 
 export const boxWrapper = {
     display: 'inline-block',
-    width:'85%'
+    width:'85%',
+    height: '80%'
 }
 
 export const boxTextStyle = {

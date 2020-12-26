@@ -31,12 +31,13 @@ export default class App extends Component {
       case 'support':
         screenToLoad = <SupportScreen />;
         break;
+      case 'p':
+        screenToLoad = <ChatBoxScreen />;
+        break;
       case 'f':
         if (split.length === 4) {
           if (split[3] === 'create') {
             screenToLoad = <CreateRoomScreen />
-          } else if (split[3] === 'party') {
-            screenToLoad = <ChatBoxScreen />
           }
         } else {
           const floor = floorList.filter(floor => floor.url === split[2]);
