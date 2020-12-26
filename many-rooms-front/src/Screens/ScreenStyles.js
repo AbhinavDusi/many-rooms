@@ -73,5 +73,10 @@ export const innerBoxWrapper = {
     height: '100%',
     border: 'none',
     textAlign: 'left',
-    verticalAlign: 'bottom'
+    verticalAlign: 'bottom',
+}
+
+export const changePageProfile = {
+    width:'15%',
+    float: 'right'
 }

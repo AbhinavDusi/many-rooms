@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { innerDivStyle, mainHeader, outerDivStyle, boxWrapper, buttonStyle, infoText } from './ScreenStyles';
+import { innerDivStyle, mainHeader, outerDivStyle, boxWrapper, buttonStyle } from './ScreenStyles';
 import PartyBox from './PartyBox';
 import CreateBox from './CreateBox';
 
@@ -20,6 +20,11 @@ export default class FloorScreen extends Component {
                     <p style = {mainHeader}>{this.props.floor}</p>
                     <div style = {boxWrapper}>
                         <CreateBox floor = {this.props.floor} floorURL = {this.props.floorURL}/>
+                        <PartyBox />
+                        <PartyBox />
+                        <PartyBox />
+                        <PartyBox />
+                        <PartyBox />
                         <PartyBox />
                     </div>
                     <div>
