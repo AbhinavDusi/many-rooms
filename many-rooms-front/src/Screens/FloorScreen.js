@@ -1,10 +1,11 @@
 import React, { Component } from 'react';
-import { innerDivStyle, mainHeader, outerDivStyle, boxWrapper, buttonStyle } from './ScreenStyles';
+import { innerDivStyle, mainHeader, outerDivStyle, boxWrapper, buttonStyle, infoText, inputTextStyle, selectStyle } from './ScreenStyles';
 import PartyBox from './Boxes/PartyBox';
 import CreateBox from './Boxes/CreateBox';
 
 export default class FloorScreen extends Component {
     prevDisplayed = false; 
+    displayOnScreen = 20; 
 
     state = {
         rooms: [],
@@ -12,18 +13,18 @@ export default class FloorScreen extends Component {
     }
 
     handleNext = () => {
-        this.setState({startBox: this.state.startBox + 20});
+        this.setState({startBox: this.state.startBox + this.displayOnScreen});
     }
 
     handlePrev = () => {
-        this.setState({startBox: this.state.startBox - 20});
+        this.setState({startBox: this.state.startBox - this.displayOnScreen});
     }
 
     getBoxesToDisplay = () => {
         const boxes = []; 
         boxes.push(<CreateBox floor = {this.props.floor} floorURL = {this.props.floorURL}/>);
         for (let i = this.state.startBox; 
-            i < Math.min(this.state.rooms.length, this.state.startBox + 19); 
+            i < Math.min(this.state.rooms.length, this.state.startBox + this.displayOnScreen - 1); 
             i++) {
             boxes.push(this.state.rooms[i]); 
         }
@@ -31,7 +32,7 @@ export default class FloorScreen extends Component {
     }
 
     displayPrevious = () => {
-        if (this.state.startBox - 20 >= 0) {
+        if (this.state.startBox -this.displayOnScreen >= 0) {
             this.prevDisplayed = true; 
             return (
                 <button style = {buttonStyle} onClick = {this.handlePrev}>Previous</button>
@@ -42,7 +43,7 @@ export default class FloorScreen extends Component {
     }
 
     displayNext = () => {
-        if (this.state.startBox + 20 < this.state.rooms.length) {
+        if (this.state.startBox + this.displayOnScreen < this.state.rooms.length) {
             return (
                 <button 
                     style = {{marginLeft: '25px', ...buttonStyle}} 
@@ -67,6 +68,19 @@ export default class FloorScreen extends Component {
             <div style = {outerDivStyle}>
                 <div style = {{height: '85%', ...innerDivStyle}}>
                     <p style = {mainHeader}>{this.props.floor}</p>
+                    <p style = {infoText}>
+                        Search by tag:
+                        <input type = 'text' style = {
+                            {marginLeft: '15px', 
+                            ...inputTextStyle,
+                            marginRight: '15px'
+                        }} />
+                        Sort by:
+                        <select style = {{marginLeft: '15px', ...selectStyle}}>
+                            <option>Trending</option>
+                            <option>New</option>
+                        </select>
+                    </p>
                     <div style = {boxWrapper}>
                         {this.getBoxesToDisplay().map(
                             room => room
@@ -75,8 +89,8 @@ export default class FloorScreen extends Component {
                     <div>
                         {this.displayPrevious()}
                         <span style = {{marginLeft: this.prevDisplayed ? '25px' : '0px'}}>
-                            Page: {Math.ceil(this.state.startBox / 20) + 1} of&nbsp;
-                            {Math.ceil(this.state.rooms.length / 20)}
+                            Page: {Math.ceil(this.state.startBox / this.displayOnScreen) + 1} of&nbsp;
+                            {Math.ceil(this.state.rooms.length / this.displayOnScreen)}
                         </span>
                         {this.displayNext()}
                     </div>

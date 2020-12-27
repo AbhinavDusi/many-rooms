@@ -27,7 +27,7 @@ export const textAreaStyle = {
     fontFamily: 'Quicksand',
     resize: 'none',
     width: '100%',
-    height: '250px',
+    height: '200px',
     backgroundColor:'#f2f2f2',
     border: 'none'
 }
@@ -79,4 +79,21 @@ export const innerBoxWrapper = {
 export const changePageProfile = {
     width:'15%',
     float: 'right'
+}
+
+export const selectStyle = {
+    marginLeft: '15px',
+    width:'150px',
+    height: '30px',
+    fontSize: '20px',
+    border: '2px solid black'
+}
+
+export const bodyTextAreaStyle = {
+    fontFamily: 'Quicksand',
+    resize: 'none',
+    width: '100%',
+    height: '150px',
+    backgroundColor:'#f2f2f2',
+    border: 'none'
 }

@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { outerDivStyle, innerDivStyle, mainHeader, infoText, textAreaStyle, buttonStyle } from './ScreenStyles';
+import { outerDivStyle, innerDivStyle, mainHeader, infoText, textAreaStyle, buttonStyle, selectStyle } from './ScreenStyles';
 
 export default class SupportScreen extends Component {
     state = {
@@ -36,6 +36,14 @@ export default class SupportScreen extends Component {
                         >
                             support@manyrooms.com
                         </a>.
+                    </p>
+                    <p style = {infoText}>
+                        Select an issue:
+                        <select style = {selectStyle}>
+                            <option>Bug</option>
+                            <option>Suggestion</option>
+                            <option>Other</option>
+                        </select>
                     </p>
                     <textarea style = {textAreaStyle}></textarea>
                     <button style = {{marginTop: '15px', ...buttonStyle}}>Send</button>

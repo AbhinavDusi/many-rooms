@@ -20,6 +20,9 @@ export default class App extends Component {
     let screenToLoad = <ErrorScreen />;
     const split = window.location.pathname.split('/'); 
     switch(split[1]) {
+      case '':
+        screenToLoad = <HomeScreen />
+        break;
       case 'home':
         screenToLoad = <HomeScreen />;
         break;
