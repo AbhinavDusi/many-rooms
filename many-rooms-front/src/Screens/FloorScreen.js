@@ -76,6 +76,7 @@ export default class FloorScreen extends Component {
                     /> 
                 )); 
                 this.setState({rooms});
+                console.log(rooms);
             })
             .catch(error => {
                 window.location.pathname = '/error';
