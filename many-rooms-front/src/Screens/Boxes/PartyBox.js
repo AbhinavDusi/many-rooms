@@ -17,11 +17,11 @@ export default class PartyBox extends Box {
                 <div style = {innerBoxWrapper} onClick = {() => 
                     window.location.pathname = '/p'
                 }>
-                    <p style = {boxTextStyle}>ID: 0001</p>
-                    <p style = {boxTextStyle}>Attendees: 23</p>
-                    <p style = {boxTextStyle}>Posts: 230</p>
-                    <p style = {boxTextStyle}>Host: Sample_User#0001</p>
-                    <p style = {boxTextStyle}>Title: This is a very long sample topic</p>
+                    <p style = {boxTextStyle}>ID: {this.props.id}</p>
+                    <p style = {boxTextStyle}>Attendees: {this.props.attendees}</p>
+                    <p style = {boxTextStyle}>Posts: {this.props.posts}</p>
+                    <p style = {boxTextStyle}>Host: {this.props.host}</p>
+                    <p style = {boxTextStyle}>Title: {this.props.title}</p>
                 </div>
             </div>
         );

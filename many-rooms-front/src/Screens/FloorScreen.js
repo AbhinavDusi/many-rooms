@@ -22,7 +22,11 @@ export default class FloorScreen extends Component {
 
     getBoxesToDisplay = () => {
         const boxes = []; 
-        boxes.push(<CreateBox floor = {this.props.floor} floorURL = {this.props.floorURL}/>);
+        boxes.push(<CreateBox 
+            floor = {this.props.floor} 
+            floorURL = {this.props.floorURL}
+            key = 'createBox'
+        />);
         for (let i = this.state.startBox; 
             i < Math.min(this.state.rooms.length, this.state.startBox + this.displayOnScreen - 1); 
             i++) {
@@ -56,11 +60,26 @@ export default class FloorScreen extends Component {
     }
 
     componentDidMount() {
-        let rooms = [];
-        for (let i = 0; i < 50; i++) {
-            rooms.push(<PartyBox key = {"" + i}/>); 
-        }
-        this.setState({rooms});
+        const rooms = []; 
+        fetch(window.location.pathname)
+            .then(res => res.json())
+            .then(res => {
+                res.forEach(room => rooms.push(
+                    <PartyBox 
+                        key = {room.id}
+                        id = {room.id}
+                        title = {room.title}
+                        host = {room.host}
+                        posts = {room.posts}
+                        attendees = {room.attendees}
+                        tags = {room.tags}
+                    /> 
+                )); 
+                this.setState({rooms});
+            })
+            .catch(error => {
+                window.location.pathname = '/error';
+            });
     }
 
     render() {
@@ -69,12 +88,13 @@ export default class FloorScreen extends Component {
                 <div style = {{height: '85%', ...innerDivStyle}}>
                     <p style = {mainHeader}>{this.props.floor}</p>
                     <p style = {infoText}>
-                        Search by tag:
-                        <input type = 'text' style = {
-                            {marginLeft: '15px', 
-                            ...inputTextStyle,
+                        <input type = 'text' style = {{verticalAlign: 'middle',...inputTextStyle}} />
+                        <button style = {{
+                            verticalAlign: 'middle',
+                            marginLeft: '15px', 
+                            ...buttonStyle,
                             marginRight: '15px'
-                        }} />
+                        }}>Search By Tag</button>
                         Sort by:
                         <select style = {{marginLeft: '15px', ...selectStyle}}>
                             <option>Trending</option>
@@ -90,7 +110,9 @@ export default class FloorScreen extends Component {
                         {this.displayPrevious()}
                         <span style = {{marginLeft: this.prevDisplayed ? '25px' : '0px'}}>
                             Page: {Math.ceil(this.state.startBox / this.displayOnScreen) + 1} of&nbsp;
-                            {Math.ceil(this.state.rooms.length / this.displayOnScreen)}
+                            {  
+                                Math.max(Math.ceil(this.state.rooms.length / this.displayOnScreen), 1)
+                            }
                         </span>
                         {this.displayNext()}
                     </div>
