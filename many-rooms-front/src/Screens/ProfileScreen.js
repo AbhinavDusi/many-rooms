@@ -3,6 +3,7 @@ import { outerDivStyle, innerDivStyle, mainHeader, infoText, boxWrapper } from '
 import PartyBox from './Boxes/PartyBox';
 import FriendBox from './Boxes/FriendBox';
 import ProfilePrevNextButtons from './ProfilePrevNextButtons';
+import EmptyBox from './Boxes/EmptyBox';
 
 export default class ProfileScreen extends Component {
     state = {
@@ -16,10 +17,19 @@ export default class ProfileScreen extends Component {
         userID: ''
     }
 
-    getBoxesToDisplay = (list, start) => {
+    getBoxesToDisplay = (list, start, type) => {
         const boxes = []; 
         for (let i = start; i < Math.min(list.length, start + 5); i++) {
             boxes.push(list[i]); 
+        }
+        if (boxes.length === 0) {
+            if (type === 0) {
+                boxes.push(<EmptyBox key = 'emptyBox' message = 'You have not created any parties.'/>)
+            } else if (type === 1) {
+                boxes.push(<EmptyBox key = 'emptyBox' message = 'You have not archived any parties.'/>)
+            } else if (type === 2) {
+                boxes.push(<EmptyBox key = 'emptyBox' message = 'You have not added any friends.'/>)
+            }
         }
         return boxes; 
     }
@@ -74,7 +84,7 @@ export default class ProfileScreen extends Component {
                     <div style = {{display: 'inline'}}>
                         <div style = {boxWrapper}>
                             {this.getBoxesToDisplay(this.state.previousParties, 
-                                this.state.prevPartiesStart).map(
+                                this.state.prevPartiesStart, 0).map(
                                 friend => friend
                             )}
                         </div>
@@ -89,7 +99,7 @@ export default class ProfileScreen extends Component {
                     <div style = {{display: 'inline'}}>
                         <div style = {boxWrapper}>
                             {this.getBoxesToDisplay(this.state.archivedParties, 
-                                this.state.archivedPartiesStart).map(
+                                this.state.archivedPartiesStart, 1).map(
                                 friend => friend
                             )}
                         </div>
@@ -103,7 +113,7 @@ export default class ProfileScreen extends Component {
                     <p style = {infoText}>Friends</p>
                     <div style = {{display: 'inline'}}>
                         <div style = {boxWrapper}>
-                            {this.getBoxesToDisplay(this.state.friends, this.state.friendsStart).map(
+                            {this.getBoxesToDisplay(this.state.friends, this.state.friendsStart, 2).map(
                                 friend => friend
                             )}
                         </div>
