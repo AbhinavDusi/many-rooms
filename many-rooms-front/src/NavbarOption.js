@@ -38,7 +38,7 @@ export default class NavbarOption extends Component {
                 onMouseLeave = {this.handleMouseLeave}
             >
                 <a
-                    href = {`/${this.props.value.toLowerCase()}`}
+                    href = {`/${this.props.value.toLowerCase()}/${this.props.id}`}
                     style = {this.state.aStyle}
                 >
                     {this.props.value}

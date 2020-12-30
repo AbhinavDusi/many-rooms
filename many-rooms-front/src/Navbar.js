@@ -3,6 +3,13 @@ import logo from './Logo.png';
 import NavbarOption from './NavbarOption'
 
 export default class Navbar extends Component {
+    getCurrentUserCookie = () => {
+        return document.cookie
+            .split(';')
+            .map(cookie => cookie.split('='))
+            .filter(cookie => cookie[0] === 'username')[0][1]; 
+    }
+
     render() { 
         const divStyle = {
             backgroundColor: 'black',
@@ -23,10 +30,10 @@ export default class Navbar extends Component {
         return (
             <div style = {divStyle}>
                 <img src = {logo} alt = 'Logo' style = {imgStyle} />
-                <NavbarOption value = 'HOME'/> 
-                <NavbarOption value = 'PROFILE'/>
-                <NavbarOption value = 'SETTINGS'/>
-                <NavbarOption value = 'SUPPORT'/>
+                <NavbarOption value = 'HOME' id = ''/> 
+                <NavbarOption value = 'PROFILE' id = {this.getCurrentUserCookie()} />
+                <NavbarOption value = 'SETTINGS' id = ''/>
+                <NavbarOption value = 'SUPPORT' id = ''/>
             </div>
         );
     }

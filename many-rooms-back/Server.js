@@ -1,8 +1,10 @@
 const Express = require('express'); 
 const bodyParser = require('body-parser');
+const cookieParser = require('cookie-parser');
 const mysql = require('mysql'); 
 
 const app = Express(); 
+
 const jsonParser = bodyParser.json(); 
 
 const db = mysql.createConnection({
@@ -35,8 +37,13 @@ app.get('/f/:floor', (req, res) => {
     }); 
 }); 
 
-app.get('/profile/:id', (req, res) => {
-    let sqlQuery = ``;
+app.get('/profile/:id', cookieParser(), (req, res) => {
+    let sqlQuery = `
+        SELECT 
+            username,
+            user_id as id
+        FROM users u;
+    `;
 }); 
 
 app.get('/p/:id', (req, res) => {
@@ -90,8 +97,7 @@ app.post('/createparty', jsonParser, (req, res) => {
             '${req.body.floor}',
             '${req.body.timeValue}'
         );
-        SELECT 
-            LAST_INSERT_ID() party_id;
+        SELECT LAST_INSERT_ID() party_id;
     `;
     db.query(sqlQuery, (err, result) => {
         res.json({

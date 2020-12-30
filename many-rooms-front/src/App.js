@@ -17,6 +17,7 @@ export default class App extends Component {
   }
 
   componentDidMount() {
+    document.cookie = "username=1";
     let screenToLoad = <ErrorScreen />;
     const split = window.location.pathname.split('/'); 
     switch(split[1]) {

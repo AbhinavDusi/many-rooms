@@ -6,44 +6,14 @@ import ProfilePrevNextButtons from './ProfilePrevNextButtons';
 
 export default class ProfileScreen extends Component {
     state = {
-        previousParties: [
-            <PartyBox key = '1'/>,
-            <PartyBox key = '2'/>,
-            <PartyBox key = '3'/>,
-            <PartyBox key = '4'/>,
-            <PartyBox key = '5'/>,
-            <PartyBox key = '6'/>,
-            <PartyBox key = '7'/>,
-            <PartyBox key = '8'/>,
-            <PartyBox key = '9'/>,
-            <PartyBox key = '10'/>,
-            <PartyBox key = '11'/>,
-            <PartyBox key = '12'/>
-        ],
-        archivedParties: [
-            <PartyBox key = '1'/>,
-            <PartyBox key = '2'/>,
-            <PartyBox key = '3'/>,
-            <PartyBox key = '4'/>,
-            <PartyBox key = '5'/>
-        ],
-        friends: [
-            <FriendBox key = '1'/>,
-            <FriendBox key = '2' />,
-            <FriendBox key = '3' />,
-            <FriendBox key = '4' />,
-            <FriendBox key = '5' />,
-            <FriendBox key = '6' />,
-            <FriendBox key = '7' />,
-            <FriendBox key = '8' />,
-            <FriendBox key = '9' />,
-            <FriendBox key = '10' />,
-            <FriendBox key = '11' />,
-            <FriendBox key = '12' />,
-        ],
+        previousParties: [],
+        archivedParties: [],
+        friends: [],
         friendsStart: 0,
         prevPartiesStart: 0,
-        archivedPartiesStart: 0
+        archivedPartiesStart: 0,
+        username: '',
+        userID: ''
     }
 
     getBoxesToDisplay = (list, start) => {
@@ -79,14 +49,27 @@ export default class ProfileScreen extends Component {
     }
 
     componentDidMount() {
-
+        fetch(window.location.pathname)
+            .then(res => res.json())
+            .then(result => {
+                console.log(result);
+                /*
+                this.setState({
+                    username: result.username,
+                    userID: result.userID,
+                    previousParties: result.previousParties,
+                    archivedParties: result.archivedParties,
+                    friends: result.friends
+                });
+                */
+            }); 
     }
 
     render() {
         return (
             <div style = {outerDivStyle}>
                 <div style = {innerDivStyle}>
-                    <p style = {mainHeader}>Sample_User#0001's Room</p>
+                    <p style = {mainHeader}>{this.state.username}#{this.state.userID}'s Room</p>
                     <p style = {infoText}>Previous Parties</p>
                     <div style = {{display: 'inline'}}>
                         <div style = {boxWrapper}>
