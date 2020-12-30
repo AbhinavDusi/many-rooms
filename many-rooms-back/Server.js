@@ -38,11 +38,51 @@ app.get('/f/:floor', (req, res) => {
 }); 
 
 app.get('/profile/:id', cookieParser(), (req, res) => {
-    let sqlQuery = `
+    let sqlQueryName = `
         SELECT 
-            username,
-            user_id as id
-        FROM users u;
+            u.display_name,
+            u.user_id
+        FROM users u
+        WHERE u.user_id = 1;
+    `;
+
+    let sqlQueryPreviousParties = `
+        SELECT 
+            u.display_name as host,
+            p.party_id as id,
+            p.title,
+            p.posts,
+            p.attendees,
+            p.tags
+        FROM parties p
+        JOIN users u
+        ON p.host_id = u.user_id
+        WHERE u.user_id = 1
+    `;
+
+    let sqlQueryArchivedParties = `
+        SELECT 
+            u.display_name,
+            p.party_id as id,
+            p.title,
+            p.posts,
+            p.attendees
+        FROM parties p
+        JOIN archived_parties ap
+        ON ap.party_id = p.party_id 
+        AND ap.user_id = 1
+        JOIN users u
+        ON u.user_id = p.host_id;
+    `;
+
+    let sqlQueryFriends = `
+        SELECT 
+        u.display_name,
+        u.user_id
+            FROM friends f
+            JOIN users u
+            WHERE f.first_user_id = u.user_id
+            AND f.second_user_id = 1;
     `;
 }); 
 
@@ -88,7 +128,7 @@ app.post('/createparty', jsonParser, (req, res) => {
             time_limit
         )
         VALUES (
-            ${0},
+            ${1},
             '${req.body.titleValue}',
             ${1},
             ${1},
