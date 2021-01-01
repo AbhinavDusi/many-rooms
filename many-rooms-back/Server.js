@@ -7,15 +7,28 @@ const app = Express();
 
 const jsonParser = bodyParser.json(); 
 
-const db = mysql.createConnection({
+const dbConfig = {
     host: 'localhost',
     user: 'root',
     password: '6Fsb2002',
     database: 'many_rooms',
     multipleStatements: true
-}); 
+};   
 
-db.connect();
+class Database {
+    constructor(config) {
+        this.connection = mysql.createConnection(config); 
+    }
+    query(sql, parser) {
+        return new Promise ((resolve, reject) => {
+            this.connection.query(sql, parser, (err, result) => {
+                resolve(result); 
+            }); 
+        }); 
+    }
+}
+
+const db = new Database(dbConfig); 
 
 app.get('/f/:floor', (req, res) => {
     let sqlQuery = `
@@ -32,18 +45,18 @@ app.get('/f/:floor', (req, res) => {
         WHERE p.status = 1 
         AND p.floor = '${req.params.floor}'
     `; 
-    db.query(sqlQuery, (err, result) => {
-        res.send(result); 
-    }); 
+    db.query(sqlQuery)
+        .then(result => res.send(result)); 
 }); 
 
 app.get('/profile/:id', cookieParser(), (req, res) => {
+    let response = []; 
     let sqlQueryName = `
         SELECT 
             u.display_name,
             u.user_id
         FROM users u
-        WHERE u.user_id = 1;
+        WHERE u.user_id = ${req.params.id};
     `;
 
     let sqlQueryPreviousParties = `
@@ -57,7 +70,7 @@ app.get('/profile/:id', cookieParser(), (req, res) => {
         FROM parties p
         JOIN users u
         ON p.host_id = u.user_id
-        WHERE u.user_id = 1
+        WHERE u.user_id = ${req.params.id};
     `;
 
     let sqlQueryArchivedParties = `
@@ -70,7 +83,7 @@ app.get('/profile/:id', cookieParser(), (req, res) => {
         FROM parties p
         JOIN archived_parties ap
         ON ap.party_id = p.party_id 
-        AND ap.user_id = 1
+        AND ap.user_id = ${req.params.id}
         JOIN users u
         ON u.user_id = p.host_id;
     `;
@@ -82,8 +95,15 @@ app.get('/profile/:id', cookieParser(), (req, res) => {
             FROM friends f
             JOIN users u
             WHERE f.first_user_id = u.user_id
-            AND f.second_user_id = 1;
+            AND f.second_user_id = ${req.params.id};
     `;
+
+    Promise.all([
+        db.query(sqlQueryName),
+        db.query(sqlQueryPreviousParties),
+        db.query(sqlQueryArchivedParties),
+        db.query(sqlQueryFriends)
+    ]).then(result => res.json(result));
 }); 
 
 app.get('/p/:id', (req, res) => {
@@ -139,13 +159,14 @@ app.post('/createparty', jsonParser, (req, res) => {
         );
         SELECT LAST_INSERT_ID() party_id;
     `;
-    db.query(sqlQuery, (err, result) => {
-        res.json({
-            err: 0,
-            msg: {
-                partyID: result[1][0].party_id
-            }
-        }); 
+    db.query(sqlQuery)
+        .then(result => {
+            res.json({
+                err: 0,
+                msg: {
+                    partyID: result[1][0].party_id
+                }
+            }); 
     }); 
 });
 

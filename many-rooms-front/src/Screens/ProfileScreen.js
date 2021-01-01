@@ -24,11 +24,11 @@ export default class ProfileScreen extends Component {
         }
         if (boxes.length === 0) {
             if (type === 0) {
-                boxes.push(<EmptyBox key = 'emptyBox' message = 'You have not created any parties.'/>)
+                boxes.push(<EmptyBox key = 'emptyBox' message = 'No parties created.'/>)
             } else if (type === 1) {
-                boxes.push(<EmptyBox key = 'emptyBox' message = 'You have not archived any parties.'/>)
+                boxes.push(<EmptyBox key = 'emptyBox' message = 'No parties archived.'/>)
             } else if (type === 2) {
-                boxes.push(<EmptyBox key = 'emptyBox' message = 'You have not added any friends.'/>)
+                boxes.push(<EmptyBox key = 'emptyBox' message = 'No friends added.'/>)
             }
         }
         return boxes; 
@@ -62,16 +62,41 @@ export default class ProfileScreen extends Component {
         fetch(window.location.pathname)
             .then(res => res.json())
             .then(result => {
-                console.log(result);
-                /*
-                this.setState({
-                    username: result.username,
-                    userID: result.userID,
-                    previousParties: result.previousParties,
-                    archivedParties: result.archivedParties,
-                    friends: result.friends
-                });
-                */
+                if (result[0].length === 0) {
+                    window.location.pathname = '/error';
+                }
+                const username = result[0][0].display_name; 
+                const userID = result[0][0].user_id;
+                const previousParties = result[1].map(room => 
+                    <PartyBox
+                        key = {room.id}
+                        id = {room.id}
+                        title = {room.title}
+                        host = {room.host}
+                        posts = {room.posts}
+                        attendees = {room.attendees}
+                        tags = {room.tags}
+                    />
+                ); 
+                const archivedParties = result[2].map(room => 
+                    <PartyBox
+                        key = {room.id}
+                        id = {room.id}
+                        title = {room.title}
+                        host = {room.host}
+                        posts = {room.posts}
+                        attendees = {room.attendees}
+                        tags = {room.tags}
+                    />
+                ); 
+                const friends = result[3].map(friend => 
+                    <FriendBox
+                        key = {friend.user_id}
+                        username = {friend.display_name}
+                        id = {friend.user_id}
+                    />
+                ); 
+                this.setState({username, userID, previousParties, archivedParties, friends}); 
             }); 
     }
 

@@ -10,8 +10,11 @@ export default class FriendBox extends Box {
                 onMouseEnter = {this.handleMouseEnter}
                 onMouseLeave = {this.handleMouseLeave}
             >
-                <div style = {innerBoxWrapper} onClick = {() => window.location.pathname = '/profile'}>
-                    <p style = {boxTextStyle}>Name: Sample_Friend#0001</p>
+                <div 
+                    style = {innerBoxWrapper} 
+                    onClick = {() => window.location.pathname = `/profile/${this.props.id}`}
+                >
+                    <p style = {boxTextStyle}>Name: {this.props.username}#{this.props.id}</p>
                 </div>
             </div>
         );

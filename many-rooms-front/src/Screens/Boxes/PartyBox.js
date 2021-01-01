@@ -3,10 +3,6 @@ import Box from './Box';
 import {innerBoxWrapper, boxTextStyle} from '../ScreenStyles'
 
 export default class PartyBox extends Box {
-    getPartyURL = id => {
-        return '/f/anime'
-    }
-
     render() { 
         return (
             <div 
@@ -15,7 +11,7 @@ export default class PartyBox extends Box {
                 onMouseLeave = {this.handleMouseLeave}
             >
                 <div style = {innerBoxWrapper} onClick = {() => 
-                    window.location.pathname = '/p'
+                    window.location.pathname = `/p/${this.props.id}`
                 }>
                     <p style = {boxTextStyle}>ID: {this.props.id}</p>
                     <p style = {boxTextStyle}>Attendees: {this.props.attendees}</p>
