@@ -108,12 +108,29 @@ export const chatTextAreaStyle = {
 }
 
 export const chatMessagesAreaStyle = {
+    display: 'flex',
+    justifyContent: 'flex-end',
+    flexDirection: 'column',
     height: '90%',
     border: '2px solid black',
     marginBottom: '15px',
-    overflowY: 'auto'
+    overflow: 'auto',
 }
 
 export const messageStyle = {
-    height:'100px'
+    margin: '5px',
+    backgroundColor: '#f2f2f2'
+}
+
+export const innerDivChatbox = {
+    height:'85%'
+}
+
+export const wrapper = {
+    display: 'flex',
+    flexDirection: 'column-reverse',
+    border: '2px solid black',
+    height:'90%',
+    marginBottom: '15px',
+    overflow: 'auto'
 }

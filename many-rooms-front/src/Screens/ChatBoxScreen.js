@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
-import { buttonStyle, chatTextAreaStyle, chatMessagesAreaStyle, innerDivStyle, outerDivStyle, 
-    tertiaryHeader, messageStyle } from './ScreenStyles';
+import { buttonStyle, chatTextAreaStyle, innerDivStyle, outerDivStyle, tertiaryHeader, 
+    innerDivChatbox, wrapper} from './ScreenStyles';
 import Message from './Message';
 
 export default class ChatBoxScreen extends Component {
@@ -18,12 +18,16 @@ export default class ChatBoxScreen extends Component {
     render() {
         return (
             <div style = {outerDivStyle}>
-                <div style = {{height: '85%', ...innerDivStyle}}>
+                <div style = {{...innerDivChatbox, ...innerDivStyle}}>
                     <p style = {tertiaryHeader}>
                         {this.state.hostName}#{this.state.hostID}: {this.state.title}
                     </p>
-                    <div style = {chatMessagesAreaStyle}>
-                        <Message style = {messageStyle}/>
+                    <div style = {wrapper}>
+                        <Message 
+                            username = 'Sample User'
+                            userID = '1'
+                            content = 'Test Message' 
+                        />
                     </div>
                     <textarea 
                         style = {chatTextAreaStyle} 
