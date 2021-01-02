@@ -2,10 +2,12 @@ import React, { Component } from 'react';
 import { innerDivStyle, mainHeader, outerDivStyle, boxWrapper, buttonStyle, infoText, inputTextStyle, selectStyle } from './ScreenStyles';
 import PartyBox from './Boxes/PartyBox';
 import CreateBox from './Boxes/CreateBox';
+import {floorList} from '../FloorListInfo';
 
 export default class FloorScreen extends Component {
     prevDisplayed = false; 
     displayOnScreen = 20; 
+    floor = ''; 
 
     state = {
         rooms: [],
@@ -23,8 +25,8 @@ export default class FloorScreen extends Component {
     getBoxesToDisplay = () => {
         const boxes = []; 
         boxes.push(<CreateBox 
-            floor = {this.props.floor} 
-            floorURL = {this.props.floorURL}
+            floor = {this.floor} 
+            floorURL = {window.location.pathname}
             key = 'createBox'
         />);
         for (let i = this.state.startBox; 
@@ -36,7 +38,7 @@ export default class FloorScreen extends Component {
     }
 
     displayPrevious = () => {
-        if (this.state.startBox -this.displayOnScreen >= 0) {
+        if (this.state.startBox - this.displayOnScreen >= 0) {
             this.prevDisplayed = true; 
             return (
                 <button style = {buttonStyle} onClick = {this.handlePrev}>Previous</button>
@@ -84,10 +86,15 @@ export default class FloorScreen extends Component {
     }
 
     render() {
+        const floors = floorList.filter(floor => floor.url === window.location.pathname);
+        if (floors.length === 1) 
+            this.floor = floors[0].name; 
+        else 
+            window.location.pathname = '/error';
         return (
             <div style = {outerDivStyle}>
                 <div style = {{height: '85%', ...innerDivStyle}}>
-                    <p style = {mainHeader}>{this.props.floor}</p>
+                    <p style = {mainHeader}>{this.floor}</p>
                     <p style = {infoText}>
                         <input type = 'text' style = {{verticalAlign: 'middle',...inputTextStyle}} />
                         <button style = {{

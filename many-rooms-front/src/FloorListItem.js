@@ -43,7 +43,7 @@ export default class FloorListItem extends Component {
                 onMouseLeave = {this.handleMouseLeave}
             >
                 <a 
-                    href = {`/f/${this.props.floorItem.url}`}
+                    href = {this.props.floorItem.url}
                     style = {this.state.aStyle}
                 >
                     {this.props.floorItem.name}

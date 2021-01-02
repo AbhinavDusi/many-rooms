@@ -97,3 +97,23 @@ export const bodyTextAreaStyle = {
     backgroundColor:'#f2f2f2',
     border: 'none'
 }
+
+export const chatTextAreaStyle = {
+    fontFamily: 'Quicksand',
+    resize: 'none',
+    width: 'calc(100% - 250px)',
+    height: '25px',
+    backgroundColor:'#f2f2f2',
+    border: 'none'
+}
+
+export const chatMessagesAreaStyle = {
+    height: '90%',
+    border: '2px solid black',
+    marginBottom: '15px',
+    overflowY: 'auto'
+}
+
+export const messageStyle = {
+    height:'100px'
+}

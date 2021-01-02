@@ -1,4 +1,5 @@
 import React, {Component, Fragment} from 'react'; 
+import { Switch, BrowserRouter as Router, Route } from 'react-router-dom';
 import Navbar from './Navbar'; 
 import OptionsPanel from './OptionsPanel'; 
 import ChatBoxScreen from './Screens/ChatBoxScreen'; 
@@ -9,53 +10,10 @@ import ProfileScreen from './Screens/ProfileScreen';
 import SettingsScreen from './Screens/SettingsScreen';
 import SupportScreen from './Screens/SupportScreen';
 import ErrorScreen from './Screens/ErrorScreen';
-import {floorList} from './FloorListInfo'; 
 
 export default class App extends Component {
-  state = {
-    screenToLoad: <HomeScreen />
-  }
-
   componentDidMount() {
     document.cookie = "username=1";
-    let screenToLoad = <ErrorScreen />;
-    const split = window.location.pathname.split('/'); 
-    switch(split[1]) {
-      case '':
-        screenToLoad = <HomeScreen />
-        break;
-      case 'home':
-        screenToLoad = <HomeScreen />;
-        break;
-      case 'profile':
-        screenToLoad = <ProfileScreen />;
-        break;
-      case 'settings':
-        screenToLoad = <SettingsScreen />;
-        break;
-      case 'support':
-        screenToLoad = <SupportScreen />;
-        break;
-      case 'p':
-        screenToLoad = <ChatBoxScreen />;
-        break;
-      case 'f':
-        if (split.length === 4) {
-          if (split[3] === 'create') {
-            screenToLoad = <CreateRoomScreen />
-          }
-        } else {
-          const floor = floorList.filter(floor => floor.url === split[2]);
-          if (floor.length === 1) {
-            screenToLoad = <FloorScreen floor = {floor[0].name} floorURL = {'/f/' + floor[0].url}/>
-          }
-        }
-        break;
-      default:
-        screenToLoad = <ErrorScreen />;
-        break;
-    }
-    this.setState({screenToLoad});
   }
 
   render() {
@@ -71,7 +29,19 @@ export default class App extends Component {
         <Navbar />
         <div style = {divStyle}>
           <OptionsPanel />
-          {this.state.screenToLoad}
+          <Router>
+            <Switch>
+              <Route exact path = '/home'><HomeScreen /></Route>
+              <Route exact path = '/'><HomeScreen /></Route>
+              <Route exact path = '/settings'><SettingsScreen/></Route>
+              <Route exact path = '/support'><SupportScreen/></Route>
+              <Route exact path = '/profile/:a([0-9]+)'><ProfileScreen/></Route>
+              <Route exact path = '/f/*/create'><CreateRoomScreen /></Route>
+              <Route exact path = '/f/*'><FloorScreen /></Route>
+              <Route exact path = '/p/*'><ChatBoxScreen/></Route>
+              <Route><ErrorScreen/></Route>
+            </Switch>
+          </Router>
         </div>
       </Fragment>
     );
