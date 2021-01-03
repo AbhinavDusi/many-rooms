@@ -1,11 +1,18 @@
 const Express = require('express'); 
 const bodyParser = require('body-parser');
-const cookieParser = require('cookie-parser');
 const mysql = require('mysql'); 
+const WebSocket = require('ws'); 
 
 const app = Express(); 
 
 const jsonParser = bodyParser.json(); 
+
+const wss = new WebSocket.Server({ port: 5001 }); 
+wss.on('connection', socket => {
+    socket.on('message', msg => {
+        console.log(msg); 
+    }); 
+}); 
 
 const dbConfig = {
     host: 'localhost',
@@ -30,6 +37,22 @@ class Database {
 
 const db = new Database(dbConfig); 
 
+app.get('/p/:id', (req, res) => {
+    let sqlQuery = `
+        SELECT 
+            p.title,
+            p.status,
+            u.display_name,
+            u.user_id
+        FROM parties p
+        JOIN users u
+        ON p.host_id = u.user_id
+        WHERE p.party_id = ${req.params.id}
+    `;
+    db.query(sqlQuery)
+        .then(result => res.json(result));
+});
+
 app.get('/f/:floor', (req, res) => {
     let sqlQuery = `
         SELECT 
@@ -49,7 +72,7 @@ app.get('/f/:floor', (req, res) => {
         .then(result => res.send(result)); 
 }); 
 
-app.get('/profile/:id', cookieParser(), (req, res) => {
+app.get('/profile/:id', (req, res) => {
     let response = []; 
     let sqlQueryName = `
         SELECT 
@@ -106,10 +129,6 @@ app.get('/profile/:id', cookieParser(), (req, res) => {
     ]).then(result => res.json(result));
 }); 
 
-app.get('/p/:id', (req, res) => {
-    let sqlQuery = ``;
-}); 
-
 app.post('/createparty', jsonParser, (req, res) => {
     if (req.body.titleValue.length < 5) {
         res.json({
@@ -159,6 +178,7 @@ app.post('/createparty', jsonParser, (req, res) => {
         );
         SELECT LAST_INSERT_ID() party_id;
     `;
+
     db.query(sqlQuery)
         .then(result => {
             res.json({

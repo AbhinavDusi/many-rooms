@@ -4,7 +4,11 @@ import NavbarOption from './NavbarOption'
 
 export default class Navbar extends Component {
     getCurrentUserCookie = () => {
-        return 1; 
+        return document.cookie
+            .split('; ')
+            .map(cookie => cookie.split('='))
+            .filter(cookie => cookie[0] === 'username')
+            [0][1]
     }
 
     render() { 

@@ -8,11 +8,30 @@ export default class ChatBoxScreen extends Component {
         title: 'This is a sample title on a topic.',
         hostName: 'Sample User',
         hostID: '1',
-        archived: false
+        archived: false,
+        chatBoxValue: '',
+        allMessages: []
+    }
+
+    ws = new WebSocket('ws://localhost:5001'); 
+
+    handleSendMessage = () => {
+        this.ws.send(this.state.chatBoxValue);
+        this.setState({chatBoxValue: ''});
     }
     
     componentDidMount() {
-
+        fetch(window.location.pathname)
+            .then(res => res.json())
+            .then(result => {
+                result = result[0];
+                this.setState({
+                    title: result.title,
+                    hostName: result.display_name,
+                    hostID: result.user_id,
+                    archived: result.status === 1 ? false : true
+                }); 
+            }); 
     }
 
     render() {
@@ -32,10 +51,17 @@ export default class ChatBoxScreen extends Component {
                     <textarea 
                         style = {chatTextAreaStyle} 
                         disabled = {this.state.archived}
+                        onChange = {e => this.setState({chatBoxValue: e.target.value})}
+                        value = {
+                            this.state.archived ? 'This party is archived.' : this.state.chatBoxValue
+                        }
+                    />
+                    <button 
+                        style = {{...buttonStyle, float: 'right'}}
+                        onClick = {this.handleSendMessage}
                     >
-                        {this.state.archived ? 'This party is archived.' : ''}
-                    </textarea>
-                    <button style = {{...buttonStyle, float: 'right'}}>Send</button>
+                        Send
+                    </button>
                 </div>
             </div>
         );

@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { outerDivStyle, innerDivStyle, mainHeader, infoText, boxWrapper } from './ScreenStyles';
+import { outerDivStyle, innerDivStyle, mainHeader, infoText, boxWrapper, buttonStyle } from './ScreenStyles';
 import PartyBox from './Boxes/PartyBox';
 import FriendBox from './Boxes/FriendBox';
 import ProfilePrevNextButtons from './ProfilePrevNextButtons';
@@ -14,7 +14,16 @@ export default class ProfileScreen extends Component {
         prevPartiesStart: 0,
         archivedPartiesStart: 0,
         username: '',
-        userID: ''
+        userID: '',
+        friendAdded: false
+    }
+
+    displayFriendButton = () => {
+        return (
+            <button style = {buttonStyle}>
+                {this.state.friendAdded ? 'Remove ' : 'Add '}Friend
+            </button>
+        );
     }
 
     getBoxesToDisplay = (list, start, type) => {
@@ -105,7 +114,8 @@ export default class ProfileScreen extends Component {
             <div style = {outerDivStyle}>
                 <div style = {innerDivStyle}>
                     <p style = {mainHeader}>{this.state.username}#{this.state.userID}'s Room</p>
-                    <p style = {infoText}>Previous Parties</p>
+                    {this.displayFriendButton()}
+                    <p style = {{lineHeight: '0.5em', ...infoText}}>Previous Parties</p>
                     <div style = {{display: 'inline'}}>
                         <div style = {boxWrapper}>
                             {this.getBoxesToDisplay(this.state.previousParties, 
@@ -120,7 +130,7 @@ export default class ProfileScreen extends Component {
                             start = {this.state.prevPartiesStart}
                         />
                     </div>
-                    <p style = {infoText}>Archived Parties</p>
+                    <p style = {{lineHeight: '0.5em', ...infoText}}>Archived Parties</p>
                     <div style = {{display: 'inline'}}>
                         <div style = {boxWrapper}>
                             {this.getBoxesToDisplay(this.state.archivedParties, 
@@ -135,7 +145,7 @@ export default class ProfileScreen extends Component {
                             start = {this.state.archivedPartiesStart}
                         />
                     </div>
-                    <p style = {infoText}>Friends</p>
+                    <p style = {{lineHeight: '0.5em', ...infoText}}>Friends</p>
                     <div style = {{display: 'inline'}}>
                         <div style = {boxWrapper}>
                             {this.getBoxesToDisplay(this.state.friends, this.state.friendsStart, 2).map(
