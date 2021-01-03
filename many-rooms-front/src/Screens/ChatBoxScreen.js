@@ -4,6 +4,14 @@ import { buttonStyle, chatTextAreaStyle, innerDivStyle, outerDivStyle, tertiaryH
 import Message from './Message';
 
 export default class ChatBoxScreen extends Component {
+    ws;
+
+    constructor() {
+        super();
+        this.ws = new WebSocket('ws://localhost:5001'); 
+        this.ws.addEventListener('message', this.handleNewIncomingMessage); 
+    }
+
     state = {
         title: 'This is a sample title on a topic.',
         hostName: 'Sample User',
@@ -13,7 +21,9 @@ export default class ChatBoxScreen extends Component {
         allMessages: []
     }
 
-    ws = new WebSocket('ws://localhost:5001'); 
+    handleNewIncomingMessage = msg => {
+
+    }
 
     handleSendMessage = () => {
         this.ws.send(this.state.chatBoxValue);
@@ -29,7 +39,7 @@ export default class ChatBoxScreen extends Component {
                     title: result.title,
                     hostName: result.display_name,
                     hostID: result.user_id,
-                    archived: result.status === 1 ? false : true
+                    archived: !(result.status === 1)
                 }); 
             }); 
     }

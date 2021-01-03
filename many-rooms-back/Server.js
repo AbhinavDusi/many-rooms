@@ -8,6 +8,7 @@ const app = Express();
 const jsonParser = bodyParser.json(); 
 
 const wss = new WebSocket.Server({ port: 5001 }); 
+
 wss.on('connection', socket => {
     socket.on('message', msg => {
         console.log(msg); 

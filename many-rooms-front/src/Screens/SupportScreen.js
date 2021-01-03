@@ -6,7 +6,13 @@ export default class SupportScreen extends Component {
         aStyle: {
             textDecoration: 'none',
             color: 'black'
-        }
+        },
+        supportValue: '',
+        messageType: 'Other'
+    }
+
+    handleSend = () => {
+        this.setState({supportValue: ''});
     }
 
     handleMouseEnter = () => {
@@ -38,15 +44,32 @@ export default class SupportScreen extends Component {
                         </a>.
                     </p>
                     <p style = {infoText}>
+                        If filing a report on a user, please include their ID and reason for the report.
+                    </p>
+                    <p style = {infoText}>
                         Select an issue:
-                        <select style = {selectStyle}>
+                        <select 
+                            style = {selectStyle}                            
+                            onChange = {e => this.setState({messageType: e.target.value})}
+                            value = {this.state.messageType}
+                        >
                             <option>Bug</option>
                             <option>Suggestion</option>
+                            <option>Report</option>
                             <option>Other</option>
                         </select>
                     </p>
-                    <textarea style = {textAreaStyle}></textarea>
-                    <button style = {{marginTop: '15px', ...buttonStyle}}>Send</button>
+                    <textarea 
+                        style = {textAreaStyle}
+                        value = ''
+                        onChange = {e => this.setState({chatBoxValue: e.target.value})}
+                    />
+                    <button 
+                        style = {{marginTop: '15px', ...buttonStyle}}
+                        onClick = {this.handleSend}
+                    >
+                        Send
+                    </button>
                 </div>
             </div>
         );
