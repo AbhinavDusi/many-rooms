@@ -33,7 +33,7 @@ export default class Message extends Component {
                 >
                     {this.props.username}#{this.props.userID}
                 </a>
-                : {this.props.content}
+                &nbsp;at {this.props.time}: {this.props.content}
             </div>
          );
     }

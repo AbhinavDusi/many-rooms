@@ -1,17 +1,31 @@
 const Express = require('express'); 
 const bodyParser = require('body-parser');
 const mysql = require('mysql'); 
-const WebSocket = require('ws'); 
+const moment = require('moment'); 
 
 const app = Express(); 
 
 const jsonParser = bodyParser.json(); 
 
-const wss = new WebSocket.Server({ port: 5001 }); 
+const { newRoomMessage, getAllMessages } = require('./Rooms');
+const { userJoin, userLeave, getCurrentUser } = require('./Users');
+const io = require('socket.io')(5002, {
+    cors: { origin: "http://localhost:3000" }
+});
 
-wss.on('connection', socket => {
-    socket.on('message', msg => {
-        console.log(msg); 
+io.on('connection', socket => {
+    socket.on('joinRoom', ({userID, username, room}) => {
+        const user = userJoin(userID, username, room);
+        socket.join(user.room); 
+        socket.emit('getAllMessages', getAllMessages(room)); 
+        socket.on('sendMessage', msg => {
+            const key = newRoomMessage(room, userID, username, msg); 
+            const time = moment().format('h:mm a');
+            io.to(user.room).emit('receiveMessage', { userID, username, msg, key, time }); 
+        }); 
+        socket.on('disconnect', () => {
+            userLeave(userID); 
+        });
     }); 
 }); 
 
@@ -41,6 +55,7 @@ const db = new Database(dbConfig);
 app.get('/p/:id', (req, res) => {
     let sqlQuery = `
         SELECT 
+            p.party_id,
             p.title,
             p.status,
             u.display_name,
@@ -58,6 +73,7 @@ app.get('/f/:floor', (req, res) => {
     let sqlQuery = `
         SELECT 
             u.display_name as host,
+            u.user_id as host_id,
             p.party_id as id,
             p.title,
             p.posts,
@@ -86,6 +102,7 @@ app.get('/profile/:id', (req, res) => {
     let sqlQueryPreviousParties = `
         SELECT 
             u.display_name as host,
+            u.user_id as host_id,
             p.party_id as id,
             p.title,
             p.posts,
@@ -99,7 +116,8 @@ app.get('/profile/:id', (req, res) => {
 
     let sqlQueryArchivedParties = `
         SELECT 
-            u.display_name,
+            u.display_name as host,
+            u.user_id as host_id,
             p.party_id as id,
             p.title,
             p.posts,

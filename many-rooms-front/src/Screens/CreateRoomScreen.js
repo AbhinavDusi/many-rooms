@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
-import { outerDivStyle, innerDivStyle, mainHeader, infoText, inputTextStyle, 
-    bodyTextAreaStyle, buttonStyle, selectStyle } from './ScreenStyles';
+import { outerDivStyle, innerDivStyle, infoText, inputTextStyle, 
+    bodyTextAreaStyle, buttonStyle, selectStyle, secondaryHeader } from './ScreenStyles';
+import {floorList} from '../FloorListInfo'
 
 export default class CreateRoomScreen extends Component {
     state = {
@@ -8,7 +9,15 @@ export default class CreateRoomScreen extends Component {
         tagsValue: '',
         bodyValue: '',
         timeValue: 5,
-        errMsg: ''
+        errMsg: '',
+        floor: 'a'
+    }
+
+    componentDidMount() {
+        const floor = floorList.find(floor => 
+            floor.url === '/f/' + window.location.pathname.split('/')[2]
+        ).name;
+        this.setState({floor});
     }
 
     handleCreateParty = () => {
@@ -33,7 +42,7 @@ export default class CreateRoomScreen extends Component {
         return (
             <div style = {outerDivStyle}>
                 <div style = {innerDivStyle}>
-                    <p style = {mainHeader}>Create A Party</p>
+                    <p style = {secondaryHeader}>Create A Party - {this.state.floor}</p>
                     <p style = {infoText}>Title</p>
                     <input 
                         type = 'text' 

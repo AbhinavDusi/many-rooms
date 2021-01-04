@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
-import { outerDivStyle, innerDivStyle, mainHeader, infoText, boxWrapper, buttonStyle } from './ScreenStyles';
-import PartyBox from './Boxes/PartyBox';
-import FriendBox from './Boxes/FriendBox';
+import { outerDivStyle, innerDivStyle, mainHeader, infoText, boxWrapper, 
+    buttonStyle } from './ScreenStyles';
 import ProfilePrevNextButtons from './ProfilePrevNextButtons';
 import EmptyBox from './Boxes/EmptyBox';
+import { getUserInfo } from '../UserInfo';
 
 export default class ProfileScreen extends Component {
     state = {
@@ -68,45 +68,10 @@ export default class ProfileScreen extends Component {
     }
 
     componentDidMount() {
-        fetch(window.location.pathname)
-            .then(res => res.json())
-            .then(result => {
-                if (result[0].length === 0) {
-                    window.location.pathname = '/error';
-                }
-                const username = result[0][0].display_name; 
-                const userID = result[0][0].user_id;
-                const previousParties = result[1].map(room => 
-                    <PartyBox
-                        key = {room.id}
-                        id = {room.id}
-                        title = {room.title}
-                        host = {room.host}
-                        posts = {room.posts}
-                        attendees = {room.attendees}
-                        tags = {room.tags}
-                    />
-                ); 
-                const archivedParties = result[2].map(room => 
-                    <PartyBox
-                        key = {room.id}
-                        id = {room.id}
-                        title = {room.title}
-                        host = {room.host}
-                        posts = {room.posts}
-                        attendees = {room.attendees}
-                        tags = {room.tags}
-                    />
-                ); 
-                const friends = result[3].map(friend => 
-                    <FriendBox
-                        key = {friend.user_id}
-                        username = {friend.display_name}
-                        id = {friend.user_id}
-                    />
-                ); 
-                this.setState({username, userID, previousParties, archivedParties, friends}); 
-            }); 
+        getUserInfo(window.location.pathname).then(result => {
+            const { userID, username, previousParties, archivedParties, friends } = result; 
+            this.setState({userID, username, previousParties, archivedParties, friends});
+        }); 
     }
 
     render() {

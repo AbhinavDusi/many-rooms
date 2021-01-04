@@ -101,7 +101,7 @@ export const bodyTextAreaStyle = {
 export const chatTextAreaStyle = {
     fontFamily: 'Quicksand',
     resize: 'none',
-    width: 'calc(100% - 250px)',
+    width: 'calc(100% - 500px)',
     height: '25px',
     backgroundColor:'#f2f2f2',
     border: 'none'
@@ -133,4 +133,18 @@ export const wrapper = {
     height:'90%',
     marginBottom: '15px',
     overflow: 'auto'
+}
+
+export const buttonStyleSmall = {
+    width:'75px',
+    height:'30px',
+    color:'black',
+    backgroundColor: 'white',
+    border:'2px solid black',
+    fontSize:'15px'
+}
+
+export const topChatboxButtons = {
+    float: 'right',
+    marginLeft: '15px'
 }

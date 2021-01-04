@@ -16,7 +16,7 @@ export default class PartyBox extends Box {
                     <p style = {boxTextStyle}>ID: {this.props.id}</p>
                     <p style = {boxTextStyle}>Attendees: {this.props.attendees}</p>
                     <p style = {boxTextStyle}>Posts: {this.props.posts}</p>
-                    <p style = {boxTextStyle}>Host: {this.props.host}</p>
+                    <p style = {boxTextStyle}>Host: {this.props.host}#{this.props.hostID}</p>
                     <p style = {boxTextStyle}>Title: {this.props.title}</p>
                 </div>
             </div>

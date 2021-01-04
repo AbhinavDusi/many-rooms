@@ -72,6 +72,7 @@ export default class FloorScreen extends Component {
                         id = {room.id}
                         title = {room.title}
                         host = {room.host}
+                        hostID = {room.host_id}
                         posts = {room.posts}
                         attendees = {room.attendees}
                         tags = {room.tags}
