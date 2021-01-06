@@ -52,6 +52,7 @@ export default class SettingsScreen extends Component {
                     <button 
                         style = {buttonStyle} 
                         onClick = {this.handleChangePassword}
+                        disabled = {this.state.secondPasswordText !== this.state.firstPasswordText}
                     >
                         Change Password
                     </button>

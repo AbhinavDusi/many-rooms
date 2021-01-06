@@ -289,4 +289,30 @@ app.post('/createparty', jsonParser, (req, res) => {
         }); 
 });
 
+app.post('/settings/updatedisplayname/', jsonParser, (req, res) => {
+    let sqlQuery = `
+        UPDATE users
+        SET display_name = ${req.body.newName}
+        WHERE user_id = ${req.body.userID};
+    `; 
+}); 
+
+app.post('/settings/updatepassword/', jsonParser, (req, res) => {
+    if (req.body.firstPassword === req.body.secondPassword) {
+        let sqlQuery = `
+            SELECT password
+            FROM users
+            WHERE user_id = ${req.body.userID}
+        `; 
+    }
+}); 
+
+app.post('/profile/updatefriends/', jsonParser, (req, res) => {
+
+}); 
+
+app.post('/profile/updatearchived/', jsonParser, (req, res) => {
+
+}); 
+
 app.listen(5000); 
