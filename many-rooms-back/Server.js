@@ -7,28 +7,6 @@ const app = Express();
 
 const jsonParser = bodyParser.json(); 
 
-const { newRoomMessage, getAllMessages } = require('./Rooms');
-const { userJoin, userLeave, getCurrentUser } = require('./Users');
-const io = require('socket.io')(5002, {
-    cors: { origin: "http://localhost:3000" }
-});
-
-io.on('connection', socket => {
-    socket.on('joinRoom', ({userID, username, room}) => {
-        const user = userJoin(userID, username, room);
-        socket.join(user.room); 
-        socket.emit('getAllMessages', getAllMessages(room)); 
-        socket.on('sendMessage', msg => {
-            const key = newRoomMessage(room, userID, username, msg); 
-            const time = moment().format('h:mm a');
-            io.to(user.room).emit('receiveMessage', { userID, username, msg, key, time }); 
-        }); 
-        socket.on('disconnect', () => {
-            userLeave(userID); 
-        });
-    }); 
-}); 
-
 const dbConfig = {
     host: 'localhost',
     user: 'root',
@@ -52,6 +30,106 @@ class Database {
 
 const db = new Database(dbConfig); 
 
+const io = require('socket.io')(5002, {
+    cors: { origin: "http://localhost:3000" }
+});
+
+disbandRoom = id => {
+    let sqlQuery = `
+        UPDATE parties 
+        SET status = 0
+        WHERE party_id = ${id};
+    `; 
+    db.query(sqlQuery); 
+}
+
+const roomActive = id => {
+    return new Promise ((resolve, reject) => {
+        let sqlQuery = `
+            SELECT * 
+            FROM parties p
+            WHERE p.status = 1
+            AND p.party_id = ${id};
+        `; 
+        db.query(sqlQuery)
+            .then(result => {
+                resolve(result.length === 1); 
+            });
+    }); 
+}
+
+const sendMessage = (id, userID, msg, time) => {
+    return new Promise((resolve, reject) => {
+        let sqlQuery = `
+            INSERT INTO messages (
+                content,
+                party_id, 
+                user_id,
+                time
+            )
+            VALUES (
+                '${msg}',
+                ${id},
+                ${userID},
+                '${time}'
+            );
+            SELECT *
+            FROM messages m
+            WHERE m.party_id = ${id};
+        `; 
+        db.query(sqlQuery)
+            .then(result => resolve(result[1].length));
+    }); 
+}
+
+const getMessages = id => {
+    return new Promise((resolve, reject) => {
+        let sqlQuery = `
+            SELECT 
+                u.user_id as userID,
+                u.display_name as username,
+                m.content as msg,
+                m.message_id as messageKey,
+                m.time
+            FROM users u
+            JOIN messages m
+            ON u.user_id = m.user_id
+            WHERE m.party_id = ${id};
+        `; 
+        db.query(sqlQuery)
+            .then(result => resolve(result)); 
+    }); 
+}
+
+io.on('connection', socket => {
+    socket.on('joinRoom', ({userID, username, room}) => {
+        socket.join(room); 
+        getMessages(room).then(result => {
+            socket.emit('getAllMessages', result);
+            if (result.length === 1) {
+                setTimeout(() => {
+                    io.to(room).emit('endParty'); 
+                    disbandRoom(room); 
+                }, 10000); 
+            }
+        });
+        roomActive(room)
+            .then(active => {
+                if (!active) {
+                    io.to(room).emit('endParty'); 
+                } else {
+                    socket.on('sendMessage', msg => {
+                        const time = moment().format('h:mm a');
+                        sendMessage(room, userID, msg, time)
+                            .then(key => {
+                                io.to(room).emit('receiveMessage', { userID, username, msg, key, time }); 
+                            }); 
+                    }); 
+                }
+            }); 
+    }); 
+}); 
+
 app.get('/p/:id', (req, res) => {
     let sqlQuery = `
         SELECT 
@@ -63,7 +141,7 @@ app.get('/p/:id', (req, res) => {
         FROM parties p
         JOIN users u
         ON p.host_id = u.user_id
-        WHERE p.party_id = ${req.params.id}
+        WHERE p.party_id = ${req.params.id};
     `;
     db.query(sqlQuery)
         .then(result => res.json(result));
@@ -83,7 +161,7 @@ app.get('/f/:floor', (req, res) => {
         JOIN users u
         ON p.host_id = u.user_id
         WHERE p.status = 1 
-        AND p.floor = '${req.params.floor}'
+        AND p.floor = '${req.params.floor}';
     `; 
     db.query(sqlQuery)
         .then(result => res.send(result)); 
@@ -200,13 +278,15 @@ app.post('/createparty', jsonParser, (req, res) => {
 
     db.query(sqlQuery)
         .then(result => {
+            const partyID = result[1][0].party_id; 
             res.json({
                 err: 0,
-                msg: {
-                    partyID: result[1][0].party_id
-                }
+                msg: { partyID }
             }); 
-    }); 
+
+            const time = moment().format('h:mm a');
+            sendMessage(partyID, req.body.hostID, req.body.bodyValue, time); 
+        }); 
 });
 
 app.listen(5000); 

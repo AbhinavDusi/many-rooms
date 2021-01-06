@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { outerDivStyle, innerDivStyle, infoText, inputTextStyle, 
     bodyTextAreaStyle, buttonStyle, selectStyle, secondaryHeader } from './ScreenStyles';
 import {floorList} from '../FloorListInfo'
+import {getUserID} from '../UserInfo';
 
 export default class CreateRoomScreen extends Component {
     state = {
@@ -10,7 +11,8 @@ export default class CreateRoomScreen extends Component {
         bodyValue: '',
         timeValue: 5,
         errMsg: '',
-        floor: 'a'
+        floor: '',
+        hostID: getUserID()
     }
 
     componentDidMount() {

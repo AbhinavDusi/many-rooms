@@ -11,7 +11,12 @@ export default class FloorScreen extends Component {
 
     state = {
         rooms: [],
-        startBox: 0
+        startBox: 0,
+        searchValue: ''
+    }
+
+    handleSearch = () => {
+        this.setState({searchValue: ''});
     }
 
     handleNext = () => {
@@ -97,13 +102,22 @@ export default class FloorScreen extends Component {
                 <div style = {{height: '85%', ...innerDivStyle}}>
                     <p style = {mainHeader}>{this.floor}</p>
                     <p style = {infoText}>
-                        <input type = 'text' style = {{verticalAlign: 'middle',...inputTextStyle}} />
+                        <input 
+                            type = 'text' 
+                            style = {{verticalAlign: 'middle',...inputTextStyle}}
+                            onChange = {e => this.setState({searchValue: e.target.value})}
+                            value = {this.state.searchValue}
+                        />
                         <button style = {{
                             verticalAlign: 'middle',
                             marginLeft: '15px', 
                             ...buttonStyle,
                             marginRight: '15px'
-                        }}>Search By Tag</button>
+                        }}
+                            onClick = {this.handleSearch}
+                        >
+                            Search By Tag
+                        </button>
                         Sort by:
                         <select style = {{marginLeft: '15px', ...selectStyle}}>
                             <option>Trending</option>

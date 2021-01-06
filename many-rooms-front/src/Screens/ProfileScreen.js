@@ -18,9 +18,16 @@ export default class ProfileScreen extends Component {
         friendAdded: false
     }
 
+    handleAddFriend = () => {
+        this.setState({friendAdded: !this.state.friendAdded});
+    }
+
     displayFriendButton = () => {
         return (
-            <button style = {buttonStyle}>
+            <button 
+                style = {buttonStyle}
+                onClick = {this.handleAddFriend}
+            >
                 {this.state.friendAdded ? 'Remove ' : 'Add '}Friend
             </button>
         );

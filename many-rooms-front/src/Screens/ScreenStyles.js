@@ -104,7 +104,8 @@ export const chatTextAreaStyle = {
     width: 'calc(100% - 500px)',
     height: '25px',
     backgroundColor:'#f2f2f2',
-    border: 'none'
+    border: 'none',
+    fontSize: '20px'
 }
 
 export const chatMessagesAreaStyle = {
@@ -119,7 +120,8 @@ export const chatMessagesAreaStyle = {
 
 export const messageStyle = {
     margin: '5px',
-    backgroundColor: '#f2f2f2'
+    backgroundColor: '#f2f2f2',
+    wordWrap: 'break-word'
 }
 
 export const innerDivChatbox = {

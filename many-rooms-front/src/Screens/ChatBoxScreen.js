@@ -25,6 +25,10 @@ export default class ChatBoxScreen extends Component {
         }
     }
 
+    handleSave = () => {
+        this.setState({saved: !this.state.saved}); 
+    }
+
     handleMouseEnter = () => {
         const linkWrapper = {...this.state.linkWrapper};
         linkWrapper.textDecoration = 'underline'; 
@@ -70,8 +74,9 @@ export default class ChatBoxScreen extends Component {
                     });
                     this.socket.on('getAllMessages', messages => this.setState({allMessages: [...messages]})); 
                     this.socket.on('receiveMessage', this.handleReceiveMessage); 
+                    this.socket.on('endParty', () => {this.setState({archived: true})});
                 }); 
-            });
+            }).catch(error => window.location.pathname = '/error');
     }
 
     render() {
@@ -109,7 +114,10 @@ export default class ChatBoxScreen extends Component {
                             this.state.archived ? 'This party is archived.' : this.state.chatBoxValue
                         }
                     />
-                    <button style = {{...buttonStyleSmall, ...topChatboxButtons}}>
+                    <button 
+                        style = {{...buttonStyleSmall, ...topChatboxButtons}}
+                        onClick = {this.handleSave}
+                    >
                         {this.state.saved ? 'Unsave' : 'Save'}
                     </button>
                     <button style = {{...buttonStyleSmall, ...topChatboxButtons}}>Top</button>
@@ -117,6 +125,7 @@ export default class ChatBoxScreen extends Component {
                     <button 
                         style = {{...buttonStyle, float: 'right', ...topChatboxButtons}}
                         onClick = {this.handleSendMessage}
+                        disabled = {this.state.archived}
                     >
                         Send
                     </button>
