@@ -5,7 +5,8 @@ export default class SettingsScreen extends Component {
     state = {
         nameText: '',
         firstPasswordText: '',
-        secondPasswordText: ''
+        secondPasswordText: '',
+        currPasswordText: ''
     }
 
     handleChangeDisplayName = () => {
@@ -13,7 +14,7 @@ export default class SettingsScreen extends Component {
     }
 
     handleChangePassword = () => {
-        this.setState({firstPasswordText: '', secondPasswordText: ''});
+        this.setState({firstPasswordText: '', secondPasswordText: '', currPasswordText: ''});
     }
 
     render() {
@@ -37,7 +38,11 @@ export default class SettingsScreen extends Component {
                     </button>
                     <p style = {tertiaryHeader}>Change Password</p>
                     <p style = {infoText}>Enter your old password.</p>
-                    <input type = 'password' style = {inputTextStyle}/>
+                    <input 
+                        type = 'password' 
+                        style = {inputTextStyle}
+                        onChange = {e => this.setState({currPasswordText: e.target.value})}
+                    />
                     <p style = {infoText}>Enter a valid new password. Make sure they match.</p>
                     <input 
                         type = 'password' 

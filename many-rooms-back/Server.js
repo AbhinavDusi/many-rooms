@@ -46,15 +46,13 @@ disbandRoom = id => {
 const roomActive = id => {
     return new Promise ((resolve, reject) => {
         let sqlQuery = `
-            SELECT * 
+            SELECT p.time_limit 
             FROM parties p
             WHERE p.status = 1
             AND p.party_id = ${id};
         `; 
         db.query(sqlQuery)
-            .then(result => {
-                resolve(result.length === 1); 
-            });
+            .then(result => resolve(result));
     }); 
 }
 
@@ -110,20 +108,29 @@ io.on('connection', socket => {
                 setTimeout(() => {
                     io.to(room).emit('endParty'); 
                     disbandRoom(room); 
-                }, 10000); 
+                }, 50000); 
             }
         });
         roomActive(room)
-            .then(active => {
+            .then(result => {
+                const active = result.length === 1; 
                 if (!active) {
                     io.to(room).emit('endParty'); 
                 } else {
+                    const timeLimit = result[0].time_limit; 
+                    let canSend = true; 
                     socket.on('sendMessage', msg => {
-                        const time = moment().format('h:mm a');
-                        sendMessage(room, userID, msg, time)
-                            .then(key => {
-                                io.to(room).emit('receiveMessage', { userID, username, msg, key, time }); 
-                            }); 
+                        if (canSend) {
+                            const time = moment().format('h:mm a');
+                            sendMessage(room, userID, msg, time)
+                                .then(key => {
+                                    io.to(room).emit('receiveMessage', { userID, username, msg, key, time }); 
+                                }); 
+                            socket.emit('changeCanSend', canSend = false);
+                            setTimeout(() => {
+                                socket.emit('changeCanSend', canSend = true); 
+                            }, 1 /*timeLimit * 1000*/); 
+                        }
                     }); 
                 }
             }); 

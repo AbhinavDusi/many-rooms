@@ -134,7 +134,8 @@ export const wrapper = {
     border: '2px solid black',
     height:'90%',
     marginBottom: '15px',
-    overflow: 'auto'
+    overflow: 'auto',
+    scrollTop: '-1500px'
 }
 
 export const buttonStyleSmall = {

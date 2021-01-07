@@ -10,12 +10,14 @@ export default class FloorScreen extends Component {
     floor = ''; 
 
     state = {
+        allRooms: [], 
         rooms: [],
         startBox: 0,
         searchValue: ''
     }
 
     handleSearch = () => {
+        const tags = this.state.searchValue.split(',').map(tag => tag.toLocaleLowerCase()); 
         this.setState({searchValue: ''});
     }
 

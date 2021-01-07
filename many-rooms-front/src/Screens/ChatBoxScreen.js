@@ -7,12 +7,14 @@ const io = require('socket.io-client');
 
 export default class ChatBoxScreen extends Component {
     socket;
+    chatBoxRef = React.createRef(); 
 
     state = {
         title: '',
         hostName: '',
         hostID: 1,
         archived: false,
+        canSend: true,
         chatBoxValue: '',
         allMessages: [],
         partyID: 1,
@@ -49,6 +51,26 @@ export default class ChatBoxScreen extends Component {
         this.socket.emit('sendMessage', this.state.chatBoxValue);
         this.setState({chatBoxValue: ''});
     }
+
+    getChatboxValue = () => {
+        if (this.state.archived) {
+            return 'This party is archived.';
+        }
+        if (!this.state.canSend) {
+            return 'You must wait between messages'; 
+        }
+        return this.state.chatBoxValue;  
+    }
+
+    goTop = () => {
+        const element = this.chatBoxRef.current;
+        element.scrollTop = -element.scrollHeight;
+    }
+
+    goBottom = () => {
+        const element = this.chatBoxRef.current;
+        element.scrollTop = element.scrollHeight;
+    }
     
     componentDidMount() {
         fetch(window.location.pathname)
@@ -75,6 +97,7 @@ export default class ChatBoxScreen extends Component {
                     this.socket.on('getAllMessages', messages => this.setState({allMessages: [...messages]})); 
                     this.socket.on('receiveMessage', this.handleReceiveMessage); 
                     this.socket.on('endParty', () => {this.setState({archived: true})});
+                    this.socket.on('changeCanSend', bool => {this.setState({canSend: bool})}); 
                 }); 
             }).catch(error => window.location.pathname = '/error');
     }
@@ -93,7 +116,7 @@ export default class ChatBoxScreen extends Component {
                             {this.state.hostName}#{this.state.hostID}
                         </a>: {this.state.title}
                     </p>
-                    <div style = {wrapper}>
+                    <div style = {wrapper} ref = {this.chatBoxRef}>
                         {
                             this.state.allMessages.map(message => 
                                 <Message 
@@ -108,11 +131,9 @@ export default class ChatBoxScreen extends Component {
                     </div>
                     <textarea 
                         style = {chatTextAreaStyle} 
-                        disabled = {this.state.archived}
+                        disabled = {this.state.archived || !this.state.canSend}
                         onChange = {e => this.setState({chatBoxValue: e.target.value})}
-                        value = {
-                            this.state.archived ? 'This party is archived.' : this.state.chatBoxValue
-                        }
+                        value = {this.getChatboxValue()}
                     />
                     <button 
                         style = {{...buttonStyleSmall, ...topChatboxButtons}}
@@ -120,12 +141,22 @@ export default class ChatBoxScreen extends Component {
                     >
                         {this.state.saved ? 'Unsave' : 'Save'}
                     </button>
-                    <button style = {{...buttonStyleSmall, ...topChatboxButtons}}>Top</button>
-                    <button style = {{...buttonStyleSmall, ...topChatboxButtons}}>Bottom</button>
+                    <button 
+                        style = {{...buttonStyleSmall, ...topChatboxButtons}}
+                        onClick = {this.goTop}
+                    >
+                        Top
+                    </button>
+                    <button 
+                        style = {{...buttonStyleSmall, ...topChatboxButtons}}
+                        onClick = {this.goBottom}
+                    >
+                        Bottom
+                    </button>
                     <button 
                         style = {{...buttonStyle, float: 'right', ...topChatboxButtons}}
                         onClick = {this.handleSendMessage}
-                        disabled = {this.state.archived}
+                        disabled = {this.state.archived || !this.state.canSend}
                     >
                         Send
                     </button>
