@@ -122,7 +122,7 @@ export default class ChatBoxScreen extends Component {
                         {
                             this.state.allMessages.map(message => 
                                 <Message 
-                                    key = {message.key}
+                                    key = {message.messageKey}
                                     username = {message.username}
                                     userID = {message.userID}
                                     content = {message.msg}
