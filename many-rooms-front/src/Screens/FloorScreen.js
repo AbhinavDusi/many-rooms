@@ -17,8 +17,28 @@ export default class FloorScreen extends Component {
     }
 
     handleSearch = () => {
-        const tags = this.state.searchValue.split(',').map(tag => tag.toLocaleLowerCase()); 
-        this.setState({searchValue: ''});
+        if (this.state.searchValue.trim() !== '') {
+            const searchTags = this.state.searchValue.split(',').map(tag => tag.toLowerCase()); 
+            const rooms = []; 
+            for (let room in this.state.allRooms) {
+                const currRoom = this.state.allRooms[room].props.tags; 
+                const roomTags = currRoom.split(',').map(tag => tag.toLowerCase()); 
+                let found = false; 
+                for (let tag in roomTags) {
+                    if (searchTags.includes(roomTags[tag])) {
+                        found = true; 
+                        break; 
+                    }
+                }
+                if (found) {
+                    rooms.push(this.state.allRooms[room]); 
+                }
+            }
+            this.setState({rooms}); 
+            this.setState({searchValue: ''});
+        } else {
+            this.setState({rooms: this.state.allRooms});
+        }
     }
 
     handleNext = () => {
@@ -85,8 +105,7 @@ export default class FloorScreen extends Component {
                         tags = {room.tags}
                     /> 
                 )); 
-                this.setState({rooms});
-                console.log(rooms);
+                this.setState({rooms, allRooms: [...rooms]});
             })
             .catch(error => {
                 window.location.pathname = '/error';

@@ -50,7 +50,8 @@ export const getUserInfo = url => {
                 }
             }).then(() => {
                 resolve(userInfo);
-            });
+            })
+            .catch(error => window.location.pathname = '/error');
     }); 
 }
 
