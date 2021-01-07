@@ -94,7 +94,9 @@ export default class ChatBoxScreen extends Component {
                         userID: this.state.userID,
                         room: this.state.partyID
                     });
-                    this.socket.on('getAllMessages', messages => this.setState({allMessages: [...messages]})); 
+                    this.socket.on('getAllMessages', messages => 
+                        this.setState({allMessages: [...messages].reverse()})
+                    ); 
                     this.socket.on('receiveMessage', this.handleReceiveMessage); 
                     this.socket.on('endParty', () => {this.setState({archived: true})});
                     this.socket.on('changeCanSend', bool => {this.setState({canSend: bool})}); 
