@@ -13,7 +13,8 @@ export default class FloorScreen extends Component {
         allRooms: [], 
         rooms: [],
         startBox: 0,
-        searchValue: ''
+        searchValue: '',
+        sortBy: 'New'
     }
 
     handleSearch = () => {
@@ -88,6 +89,16 @@ export default class FloorScreen extends Component {
         }  
     }
 
+    handleSortBy = () => {
+        if (this.state.sortBy === 'New') {
+
+        } else if (this.state.sortBy === 'Old') {
+
+        } else {
+            
+        }
+    }
+
     componentDidMount() {
         const rooms = []; 
         fetch(window.location.pathname)
@@ -140,9 +151,17 @@ export default class FloorScreen extends Component {
                             Search By Tag
                         </button>
                         Sort by:
-                        <select style = {{marginLeft: '15px', ...selectStyle}}>
-                            <option>Trending</option>
+                        <select 
+                            style = {{marginLeft: '15px', ...selectStyle}}
+                            onChange = {e => {
+                                this.handleSortBy(); 
+                                this.setState({sortBy: e.target.value}); 
+                            }}
+                            value = {this.state.sortBy}
+                        >
                             <option>New</option>
+                            <option>Old</option>
+                            <option>Trending</option>
                         </select>
                     </p>
                     <div style = {boxWrapper}>

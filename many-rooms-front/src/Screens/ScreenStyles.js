@@ -16,11 +16,13 @@ export const mainHeader = {
 
 export const secondaryHeader = {
     fontSize: '60px',
-    lineHeight: '0px'
+    lineHeight: '0px',
+    fontFamily: 'Quicksand'
 }
 
 export const infoText = {
-    fontSize: '25px'
+    fontSize: '25px',
+    fontFamily: 'Quicksand'
 }
 
 export const textAreaStyle = {
@@ -43,7 +45,8 @@ export const inputTextStyle = {
 
 export const tertiaryHeader = {
     fontSize: '35px',
-    lineHeight: '0px'
+    lineHeight: '0px',
+    fontFamily: 'Quicksand'
 }
 
 export const buttonStyle = {

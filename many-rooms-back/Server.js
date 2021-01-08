@@ -3,6 +3,10 @@ const bodyParser = require('body-parser');
 const mysql = require('mysql'); 
 const moment = require('moment'); 
 
+const PORT_SERVER = 5000; 
+const PORT_WEBSOCKET = 5002; 
+const PARTY_TIME = 50000; 
+
 const app = Express(); 
 
 const jsonParser = bodyParser.json(); 
@@ -30,7 +34,7 @@ class Database {
 
 const db = new Database(dbConfig); 
 
-const io = require('socket.io')(5002, {
+const io = require('socket.io')(PORT_WEBSOCKET, {
     cors: { origin: "http://localhost:3000" }
 });
 
@@ -108,7 +112,7 @@ io.on('connection', socket => {
                 setTimeout(() => {
                     io.to(room).emit('endParty'); 
                     disbandRoom(room); 
-                }, 50000); 
+                }, PARTY_TIME); 
             }
         });
         roomActive(room)
@@ -296,7 +300,7 @@ app.post('/createparty', jsonParser, (req, res) => {
         }); 
 });
 
-app.post('/settings/updatedisplayname/', jsonParser, (req, res) => {
+app.put('/settings/updatedisplayname/', jsonParser, (req, res) => {
     let sqlQuery = `
         UPDATE users
         SET display_name = ${req.body.newName}
@@ -304,7 +308,7 @@ app.post('/settings/updatedisplayname/', jsonParser, (req, res) => {
     `; 
 }); 
 
-app.post('/settings/updatepassword/', jsonParser, (req, res) => {
+app.put('/settings/updatepassword/', jsonParser, (req, res) => {
     if (req.body.firstPassword === req.body.secondPassword) {
         let sqlQuery = `
             SELECT password
@@ -314,12 +318,12 @@ app.post('/settings/updatepassword/', jsonParser, (req, res) => {
     }
 }); 
 
-app.post('/profile/updatefriends/', jsonParser, (req, res) => {
+app.put('/profile/updatefriends/', jsonParser, (req, res) => {
 
 }); 
 
-app.post('/profile/updatearchived/', jsonParser, (req, res) => {
+app.put('/profile/updatearchived/', jsonParser, (req, res) => {
 
 }); 
 
-app.listen(5000); 
+app.listen(PORT_SERVER)
