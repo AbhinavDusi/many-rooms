@@ -1,4 +1,4 @@
-import React, { Component, Fragment } from 'react';
+import React, { Component } from 'react';
 import LogInForm from './LogInForm';
 import CreateForm from './CreateForm'; 
 import logo from './Logo.png'; 
@@ -41,14 +41,14 @@ export default class AuthenticationPage extends Component {
         };
 
         return ( 
-            <Fragment>
+            <div style = {{overflow: 'hidden'}}>
                 <div style = {divStyle}>
                     <img src = {logo} alt = 'Logo' style = {imgStyle} />
                     <span style = {titleTextStyle}>MANY ROOMS</span>
                 </div>
                 {this.state.showLogIn ? <LogInForm onChangeType = {this.handleChange}/>
                     : <CreateForm onChangeType = {this.handleChange}/>}
-            </Fragment>
+            </div>
         );
     }
 }

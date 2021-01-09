@@ -2,6 +2,30 @@ import React, { Component } from 'react';
 import { buttonStyle, infoText, secondaryHeader } from './Screens/ScreenStyles';
 
 export default class LogInForm extends Component {
+    state = {
+        email: '', 
+        password: '',
+        err: ''
+    }
+
+    handleSubmit = () => {
+        fetch ('/login', {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({...this.state})
+        })
+            .then(res => res.json())
+            .then(result => {
+                if (result.err === 1) {
+                    this.setState({err: result.msg});
+                } else {
+                    document.cookie = 'sid=' + result.msg.accessToken + '; path=/;';
+                    document.cookie = 'username=' + result.msg.userID + '; path=/;';
+                    window.location.pathname = '/home'; 
+                }
+            });
+    }
+
     render() { 
         const wrapper = {
             marginTop: '10%',
@@ -26,11 +50,28 @@ export default class LogInForm extends Component {
             <div style = {wrapper}>
                 <div style = {{ margin: '0 auto'}}>
                     <p style = {secondaryHeader}>Log In</p>
-                    <p style = {{...labelStyle, ...infoText}}>Enter Username</p>
-                    <input type = 'text' style = {inputTextStyle} />
+                    <p style = {{...labelStyle, ...infoText}}>Enter Email</p>
+                    <input 
+                        type = 'text' 
+                        style = {inputTextStyle}
+                        onChange = {e => this.setState({email: e.target.value})}
+                        value = {this.state.email}
+                    />
                     <p style = {{...labelStyle, ...infoText}}>Enter Password</p>
-                    <input type = 'text' style = {inputTextStyle}/><p></p>
-                    <button style = {buttonStyle}>Submit</button><p></p>
+                    <input 
+                        type = 'password' 
+                        style = {inputTextStyle}
+                        onChange = {e => this.setState({password: e.target.value})}
+                        value = {this.state.password}
+                    /><p></p>
+                    <button 
+                        style = {buttonStyle}
+                        onClick = {this.handleSubmit}
+                    >
+                        Submit
+                    </button>
+                    <span style = {{marginLeft: '15px', ...infoText}}>{this.state.err}</span>
+                    <p></p>
                     <button 
                         style = {buttonStyle} 
                         onClick = {this.props.onChangeType}

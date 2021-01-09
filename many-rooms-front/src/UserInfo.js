@@ -56,6 +56,9 @@ export const getUserInfo = url => {
 }
 
 export const getUserID = () => {
+    if (document.cookie === '') {
+        return '';
+    }
     return document.cookie
         .split('; ')
         .map(cookie => cookie.split('='))

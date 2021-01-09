@@ -15,22 +15,39 @@ export default class ProfileScreen extends Component {
         archivedPartiesStart: 0,
         username: '',
         userID: '',
-        friendAdded: false
+        friendAdded: false,
+        myAccount: true
+    }
+
+    handleLogOut = () => {
+        document.cookie = 'username=;path=/';
+        window.location.pathname = '';
     }
 
     handleAddFriend = () => {
         this.setState({friendAdded: !this.state.friendAdded});
     }
 
-    displayFriendButton = () => {
-        return (
-            <button 
-                style = {buttonStyle}
-                onClick = {this.handleAddFriend}
-            >
-                {this.state.friendAdded ? 'Remove ' : 'Add '}Friend
-            </button>
-        );
+    displayTopButton = () => {
+        if (!this.state.myAccount) {
+            return (
+                <button 
+                    style = {buttonStyle}
+                    onClick = {this.handleAddFriend}
+                >
+                    {this.state.friendAdded ? 'Remove ' : 'Add '}Friend
+                </button>
+            );
+        } else {
+            return (
+                <button 
+                    style = {buttonStyle}
+                    onClick = {this.handleLogOut}
+                >
+                    Sign Out
+                </button>
+            )
+        }
     }
 
     getBoxesToDisplay = (list, start, type) => {
@@ -86,7 +103,7 @@ export default class ProfileScreen extends Component {
             <div style = {outerDivStyle}>
                 <div style = {innerDivStyle}>
                     <p style = {mainHeader}>{this.state.username}#{this.state.userID}'s Room</p>
-                    {this.displayFriendButton()}
+                    {this.displayTopButton()}
                     <p style = {{lineHeight: '0.5em', ...infoText}}>Previous Parties</p>
                     <div style = {{display: 'inline'}}>
                         <div style = {boxWrapper}>

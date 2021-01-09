@@ -2,6 +2,9 @@ const Express = require('express');
 const bodyParser = require('body-parser');
 const mysql = require('mysql'); 
 const moment = require('moment'); 
+const bcrypt = require('bcrypt');
+const jwt = require('jsonwebtoken');
+require('dotenv').config();
 
 const PORT_SERVER = 5000; 
 const PORT_WEBSOCKET = 5002; 
@@ -299,6 +302,106 @@ app.post('/createparty', jsonParser, (req, res) => {
             sendMessage(partyID, req.body.hostID, req.body.bodyValue, time); 
         }); 
 });
+
+app.post('/createaccount', jsonParser, async (req, res) => {
+    let sqlQuery = `
+        SELECT *
+        FROM users
+        WHERE email = '${req.body.email}'; 
+    `; 
+    db.query(sqlQuery)
+        .then(async result => {
+            if (result.length === 0) {
+                if (req.body.firstPassword !== req.body.secondPassword) {
+                    res.json({
+                        err: 1,
+                        msg: 'Passwords do not match.'
+                    });
+                } else if (req.body.firstPassword.length < 4
+                    || req.body.username.length < 4
+                    || req.body.email.length < 4) {
+                    res.json({
+                        err: 1,
+                        msg: 'Information too short.'
+                    });
+                } else {
+                    const salt = await bcrypt.genSalt(); 
+                    const hashedPassword = await bcrypt.hash(req.body.firstPassword, salt);  
+                    sqlQuery = `
+                        INSERT INTO users (
+                            display_name,
+                            password,
+                            email
+                        )
+                        VALUES (
+                            '${req.body.username}',
+                            '${hashedPassword}',
+                            '${req.body.email}'
+                        );
+                    `; 
+                    db.query(sqlQuery);
+                    res.json({
+                        err: 0,
+                        msg: 'Success'
+                    });
+                }
+            } else {
+                res.json({
+                    err: 1,
+                    msg: 'Email already has account.'
+                });
+            }
+        });
+});
+
+app.post('/login', jsonParser, async (req, res) => {
+    let sqlQuery = `
+        SELECT email, password, user_id
+        FROM users
+        WHERE email = '${req.body.email}';
+    `;
+    db.query(sqlQuery)
+        .then(async result => {
+            if (result.length === 0) {
+                res.json({
+                    err: 1,
+                    msg: 'There is no account with that email.'
+                })
+            } else {
+                const hashedPassword = result[0].password;
+                bcrypt.compare(req.body.password, hashedPassword).then(valid => {
+                    if (valid) {
+                        const user = { email: req.body.email }; 
+                        const accessToken = jwt.sign(user, process.env.ACCESS_TOKEN_SECRET);
+                        res.json({
+                            err: 0,
+                            msg: {accessToken, userID: result[0].user_id}
+                        }); 
+                    } else {
+                        res.json({
+                            err: 1,
+                            msg: 'Incorrect username and password combination.'
+                        }); 
+                    }
+                });
+            }
+        }); 
+}); 
+
+const authenticateToken = (req, res) => {
+    const authHeader = req.headers['authorization'];
+    const token = authHeader && authHeader.split(' ')[1];
+    if (token == null) {
+        return res.sendStatus(401);
+    }
+    jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (err, user) => {
+        if (err) {
+            return res.sendStatus(403); 
+        } 
+        req.user = user;
+        next();
+    });
+}
 
 app.put('/settings/updatedisplayname/', jsonParser, (req, res) => {
     let sqlQuery = `

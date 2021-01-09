@@ -10,13 +10,14 @@
   "author": "Abhinav Dusi",
   "license": "ISC",
   "dependencies": {
+    "bcrypt": "^5.0.0",
     "body-parser": "^1.19.0",
-    "cookie-parser": "^1.4.5",
+    "dotenv": "^8.2.0",
     "express": "^4.17.1",
+    "jsonwebtoken": "^8.5.1",
     "moment": "^2.29.1",
     "mysql": "^2.18.1",
     "nodemon": "^2.0.6",
-    "socket.io": "^3.0.4",
-    "ws": "^7.4.2"
+    "socket.io": "^3.0.4"
   }
 }
