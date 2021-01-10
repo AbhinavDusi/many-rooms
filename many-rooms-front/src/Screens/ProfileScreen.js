@@ -21,6 +21,7 @@ export default class ProfileScreen extends Component {
 
     handleLogOut = () => {
         document.cookie = 'username=;path=/';
+        document.cookie = 'sid=;path=/';
         window.location.pathname = '';
     }
 

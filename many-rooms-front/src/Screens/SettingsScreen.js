@@ -11,6 +11,19 @@ export default class SettingsScreen extends Component {
 
     handleChangeDisplayName = () => {
         this.setState({nameText: ''}); 
+        fetch('/settings/updatedisplayname', {
+            method: 'PUT',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({ newName: this.state.nameText })
+        })
+            .then(res => res.json())
+            .then(res => {
+                if (res.err === 1) {
+                    document.cookie = 'username=;path=/';
+                    document.cookie = 'sid=;path=/';
+                    window.location.pathname = '';
+                } 
+            }); 
     }
 
     handleChangePassword = () => {
@@ -29,6 +42,7 @@ export default class SettingsScreen extends Component {
                         type = 'text' 
                         style = {inputTextStyle}
                         onChange = {e => this.setState({nameText: e.target.value})}
+                        value = {this.state.nameText}
                     /><p></p>
                     <button 
                         style = {buttonStyle} 
@@ -42,17 +56,20 @@ export default class SettingsScreen extends Component {
                         type = 'password' 
                         style = {inputTextStyle}
                         onChange = {e => this.setState({currPasswordText: e.target.value})}
+                        value = {this.state.currPasswordText}
                     />
                     <p style = {infoText}>Enter a valid new password. Make sure they match.</p>
                     <input 
                         type = 'password' 
                         style = {inputTextStyle}
                         onChange = {e => this.setState({firstPasswordText: e.target.value})}
+                        value = {this.state.firstPasswordText}
                     /><p></p>
                     <input 
                         type = 'password' 
                         style = {inputTextStyle}
                         onChange = {e => this.setState({secondPasswordText: e.target.value})}
+                        value = {this.state.secondPasswordText}
                     /><p></p>
                     <button 
                         style = {buttonStyle} 

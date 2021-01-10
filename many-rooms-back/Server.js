@@ -4,6 +4,7 @@ const mysql = require('mysql');
 const moment = require('moment'); 
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
+const cookieParser = require('cookie-parser')
 require('dotenv').config();
 
 const PORT_SERVER = 5000; 
@@ -11,6 +12,7 @@ const PORT_WEBSOCKET = 5002;
 const PARTY_TIME = 50000; 
 
 const app = Express(); 
+app.use(cookieParser());
 
 const jsonParser = bodyParser.json(); 
 
@@ -388,27 +390,26 @@ app.post('/login', jsonParser, async (req, res) => {
         }); 
 }); 
 
-const authenticateToken = (req, res) => {
-    const authHeader = req.headers['authorization'];
-    const token = authHeader && authHeader.split(' ')[1];
-    if (token == null) {
-        return res.sendStatus(401);
-    }
-    jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (err, user) => {
+const authenticateToken = (req, res, next) => {
+    jwt.verify(req.cookies.sid, process.env.ACCESS_TOKEN_SECRET, (err, user) => {
         if (err) {
-            return res.sendStatus(403); 
-        } 
-        req.user = user;
-        next();
+            res.json({err: 1}); 
+        } else {
+            req.user = user;
+            next();
+        }
     });
 }
 
-app.put('/settings/updatedisplayname/', jsonParser, (req, res) => {
+app.put('/settings/updatedisplayname/', jsonParser, authenticateToken, (req, res) => {
     let sqlQuery = `
         UPDATE users
-        SET display_name = ${req.body.newName}
-        WHERE user_id = ${req.body.userID};
+        SET display_name = '${req.body.newName}'
+        WHERE email = '${req.user.email}';
     `; 
+    db.query(sqlQuery)
+        .then(() => res.json({err: 0}))
+        .catch(() => res.json({err: 1}));
 }); 
 
 app.put('/settings/updatepassword/', jsonParser, (req, res) => {

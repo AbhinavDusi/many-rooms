@@ -1,7 +1,8 @@
-POST http://localhost:5000/login
+PUT http://localhost:5000/settings/updatedisplayname
 Content-Type: application/json
 
 {
-    "password": "password",
-    "email": "email@email.com"
+    "newName": "NewUsername",
+    "userID": "14",
+    "password": "6Fsb2002"
 }
