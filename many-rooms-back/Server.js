@@ -443,7 +443,7 @@ app.put('/settings/updatepassword/', jsonParser, authenticateToken, async (req, 
                         `; 
                         await db.query(sqlQuery)
                             .then(() => res.json({err: 0, msg: 'Password Changed!'}))
-                            .catch(err => res.json({err: 1}));
+                            .catch(() => res.json({err: 1}));
                     } 
                 } else {
                     res.json({err: 2, msg: 'Incorrect first password!'});
@@ -453,11 +453,19 @@ app.put('/settings/updatepassword/', jsonParser, authenticateToken, async (req, 
     }).catch(err => res.json({err: 1}));
 }); 
 
-app.put('/profile/updatefriends/', jsonParser, authenticateToken, (req, res) => {
+app.put('/profile/addfriend/', jsonParser, authenticateToken, (req, res) => {
 
 }); 
 
-app.put('/profile/updatearchived/', jsonParser, authenticateToken, (req, res) => {
+app.put('/profile/removefriend/', jsonParser, authenticateToken, (req, res) => {
+
+}); 
+
+app.put('/profile/addarchived/', jsonParser, authenticateToken, (req, res) => {
+
+}); 
+
+app.put('/profile/removearchived/', jsonParser, authenticateToken, (req, res) => {
 
 }); 
 
