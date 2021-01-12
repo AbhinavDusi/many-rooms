@@ -6,7 +6,9 @@ export default class SettingsScreen extends Component {
         nameText: '',
         firstPasswordText: '',
         secondPasswordText: '',
-        currPasswordText: ''
+        currPasswordText: '',
+        displayNameErr: '',
+        passwordErr: ''
     }
 
     handleChangeDisplayName = () => {
@@ -22,12 +24,34 @@ export default class SettingsScreen extends Component {
                     document.cookie = 'username=;path=/';
                     document.cookie = 'sid=;path=/';
                     window.location.pathname = '';
-                } 
+                } else {
+                    this.setState({displayNameErr: res.msg});
+                }
             }); 
     }
 
     handleChangePassword = () => {
         this.setState({firstPasswordText: '', secondPasswordText: '', currPasswordText: ''});
+        fetch('/settings/updatepassword', {
+            method: 'PUT',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({
+                currPassword: this.state.currPasswordText,
+                firstPassword: this.state.firstPasswordText,
+                secondPassword: this.state.secondPasswordText
+            })  
+        })
+            .then(res => res.json())
+            .then(res => {
+                console.log(res);
+                if (res.err === 1) {
+                    document.cookie = 'username=;path=/';
+                    document.cookie = 'sid=;path=/';
+                    window.location.pathname = '';
+                } else {
+                    this.setState({passwordErr: res.msg});
+                }
+            }); 
     }
 
     render() {
@@ -50,6 +74,7 @@ export default class SettingsScreen extends Component {
                     >
                         Change Display Name
                     </button>
+                    <span style = {{marginLeft: '15px', ...infoText}}>{this.state.displayNameErr}</span>
                     <p style = {tertiaryHeader}>Change Password</p>
                     <p style = {infoText}>Enter your old password.</p>
                     <input 
@@ -78,15 +103,7 @@ export default class SettingsScreen extends Component {
                     >
                         Change Password
                     </button>
-                    <span style = {{marginLeft: '15px'}}>
-                        {
-                            this.state.firstPasswordText !== this.state.secondPasswordText 
-                            && this.state.firstPasswordText.length > 0
-                            && this.state.secondPasswordText.length > 0
-                            ? 'Passwords do not match!'
-                            : ''
-                        }
-                    </span>
+                    <span style = {{marginLeft: '15px', ...infoText}}>{this.state.passwordErr}</span>
                 </div>
             </div>
         );

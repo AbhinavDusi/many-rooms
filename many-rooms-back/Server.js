@@ -4,7 +4,7 @@ const mysql = require('mysql');
 const moment = require('moment'); 
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
-const cookieParser = require('cookie-parser')
+const cookieParser = require('cookie-parser');
 require('dotenv').config();
 
 const PORT_SERVER = 5000; 
@@ -43,7 +43,7 @@ const io = require('socket.io')(PORT_WEBSOCKET, {
     cors: { origin: "http://localhost:3000" }
 });
 
-disbandRoom = id => {
+const disbandRoom = id => {
     let sqlQuery = `
         UPDATE parties 
         SET status = 0
@@ -242,7 +242,18 @@ app.get('/profile/:id', (req, res) => {
     ]).then(result => res.json(result));
 }); 
 
-app.post('/createparty', jsonParser, (req, res) => {
+const authenticateToken = (req, res, next) => {
+    jwt.verify(req.cookies.sid, process.env.ACCESS_TOKEN_SECRET, (err, user) => {
+        if (err) {
+            res.json({err: 1}); 
+        } else {
+            req.user = user;
+            next();
+        }
+    });
+}
+
+app.post('/createparty', jsonParser, authenticateToken, (req, res) => {
     if (req.body.titleValue.length < 5) {
         res.json({
             err: 1,
@@ -390,43 +401,63 @@ app.post('/login', jsonParser, async (req, res) => {
         }); 
 }); 
 
-const authenticateToken = (req, res, next) => {
-    jwt.verify(req.cookies.sid, process.env.ACCESS_TOKEN_SECRET, (err, user) => {
-        if (err) {
-            res.json({err: 1}); 
-        } else {
-            req.user = user;
-            next();
-        }
-    });
-}
-
 app.put('/settings/updatedisplayname/', jsonParser, authenticateToken, (req, res) => {
-    let sqlQuery = `
-        UPDATE users
-        SET display_name = '${req.body.newName}'
-        WHERE email = '${req.user.email}';
-    `; 
-    db.query(sqlQuery)
-        .then(() => res.json({err: 0}))
-        .catch(() => res.json({err: 1}));
-}); 
-
-app.put('/settings/updatepassword/', jsonParser, (req, res) => {
-    if (req.body.firstPassword === req.body.secondPassword) {
+    if (req.body.newName.length >= 4) {
         let sqlQuery = `
-            SELECT password
-            FROM users
-            WHERE user_id = ${req.body.userID}
+            UPDATE users
+            SET display_name = '${req.body.newName}'
+            WHERE email = '${req.user.email}';
         `; 
+        db.query(sqlQuery)
+            .then(() => res.json({err: 0, msg: 'Display name changed!'}))
+            .catch(() => res.json({err: 1}));
+    } else {
+        res.json({err: 2, msg: 'Display name too short!'});
     }
 }); 
 
-app.put('/profile/updatefriends/', jsonParser, (req, res) => {
+app.put('/settings/updatepassword/', jsonParser, authenticateToken, async (req, res) => {
+    let sqlQuery = `
+        SELECT email, password, user_id
+        FROM users
+        WHERE email = '${req.user.email}';
+    `;
+    db.query(sqlQuery).then(result => {
+        if (result.length === 0) {
+            res.json({err: 1});
+        } else {
+            const hashedPassword = result[0].password;
+            bcrypt.compare(req.body.currPassword, hashedPassword).then(async valid => {
+                if (valid) {
+                    if (req.body.firstPassword !== req.body.secondPassword) {
+                        res.json({err: 2, msg: 'Passwords do not match!'});
+                    } else if (req.body.firstPassword.length < 4) {
+                        res.json({err: 2, msg: 'Password is too short!'});
+                    } else {
+                        const salt = await bcrypt.genSalt(); 
+                        const hashedPassword = await bcrypt.hash(req.body.firstPassword, salt);  
+                        let sqlQuery = `
+                            UPDATE users
+                            SET password = '${hashedPassword}'
+                            WHERE email = '${req.user.email}';
+                        `; 
+                        await db.query(sqlQuery)
+                            .then(() => res.json({err: 0, msg: 'Password Changed!'}))
+                            .catch(err => res.json({err: 1}));
+                    } 
+                } else {
+                    res.json({err: 2, msg: 'Incorrect first password!'});
+                }
+            }); 
+        }
+    }).catch(err => res.json({err: 1}));
+}); 
+
+app.put('/profile/updatefriends/', jsonParser, authenticateToken, (req, res) => {
 
 }); 
 
-app.put('/profile/updatearchived/', jsonParser, (req, res) => {
+app.put('/profile/updatearchived/', jsonParser, authenticateToken, (req, res) => {
 
 }); 
 
