@@ -35,7 +35,11 @@ export default class ChatBoxScreen extends Component {
 
     handleSave = () => {
         if (this.state.saved) {
-            fetch ('/profile/removearchived')
+            fetch ('/profile/removearchived', {
+                'method': 'PUT',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({ partyID: this.state.partyID })
+            })
                 .then(res => res.json())
                 .then(res => {
                     if (res.err === 1) {
@@ -43,7 +47,11 @@ export default class ChatBoxScreen extends Component {
                     } 
                 }); 
         } else {
-            fetch ('/profile/addarchived')
+            fetch ('/profile/addarchived', {
+                'method': 'PUT',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({ partyID: this.state.partyID })
+            })
                 .then(res => res.json())
                 .then(res => {
                     if (res.err === 1) {
@@ -51,7 +59,7 @@ export default class ChatBoxScreen extends Component {
                     } 
                 }); 
         }
-        this.setState({saved: !this.state.saved}); 
+        this.setState({saved: !this.state.saved});
     }
 
     handleMouseEnter = () => {
@@ -95,8 +103,8 @@ export default class ChatBoxScreen extends Component {
         element.scrollTop = element.scrollHeight;
     }
     
-    componentDidMount() {
-        fetch(window.location.pathname)
+    async componentDidMount() {
+        await fetch(window.location.pathname)
             .then(res => res.json())
             .then(result => {
                 result = result[0];
@@ -124,7 +132,10 @@ export default class ChatBoxScreen extends Component {
                     this.socket.on('endParty', () => {this.setState({archived: true})});
                     this.socket.on('changeCanSend', bool => {this.setState({canSend: bool})}); 
                 }); 
-            }).catch(error => window.location.pathname = '/error');
+            }).catch(() => window.location.pathname = '/error');
+        await fetch ('/profile/issaved/' + this.state.partyID) 
+            .then(res => res.json())
+            .then(res => this.setState({saved: res.msg}));
     }
 
     render() {

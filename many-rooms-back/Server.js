@@ -9,7 +9,7 @@ require('dotenv').config();
 
 const PORT_SERVER = 5000; 
 const PORT_WEBSOCKET = 5002; 
-const PARTY_TIME = 50000; 
+const PARTY_TIME = 300000; 
 
 const app = Express(); 
 app.use(cookieParser());
@@ -19,7 +19,7 @@ const jsonParser = bodyParser.json();
 const dbConfig = {
     host: 'localhost',
     user: 'root',
-    password: '6Fsb2002',
+    password: 'PASSWORD',
     database: 'many_rooms',
     multipleStatements: true
 };   
@@ -108,6 +108,31 @@ const getMessages = id => {
     }); 
 }
 
+updateMessages = id => {
+    let sqlQuery = `
+        UPDATE parties
+        SET posts = posts + 1
+        WHERE party_id = ${id}
+    `; 
+    db.query(sqlQuery);
+}
+
+updateAttendees = (id, list) => {
+    let attendees = new Set(); 
+    for(let i in list) {
+        const msg = list[i]; 
+        if (!attendees.has(msg.userID)) {
+            attendees.add(msg.userID); 
+        }
+    }
+    let sqlQuery = `
+        UPDATE parties
+        SET attendees = ${attendees.size}
+        WHERE party_id = ${id}
+    `; 
+    db.query(sqlQuery);
+}
+
 io.on('connection', socket => {
     socket.on('joinRoom', ({userID, username, room}) => {
         socket.join(room); 
@@ -138,7 +163,9 @@ io.on('connection', socket => {
                             socket.emit('changeCanSend', canSend = false);
                             setTimeout(() => {
                                 socket.emit('changeCanSend', canSend = true); 
-                            }, 1 /*timeLimit * 1000*/); 
+                            }, timeLimit * 1000); 
+                            updateMessages(room);
+                            getMessages(room).then(result => updateAttendees(room, result)); 
                         }
                     }); 
                 }
@@ -172,7 +199,8 @@ app.get('/f/:floor', (req, res) => {
             p.title,
             p.posts,
             p.attendees,
-            p.tags
+            p.tags,
+            p.start_time
         FROM parties p
         JOIN users u
         ON p.host_id = u.user_id
@@ -460,8 +488,8 @@ app.put('/profile/addfriend/', jsonParser, authenticateToken, (req, res) => {
             second_user_id
         )
         VALUES (
-            ${req.user.userID},
-            ${req.body.addFriendID}
+            ${req.body.addFriendID},
+            ${req.user.userID}
         );
     `; 
     db.query(sqlQuery).then(() => res.json({ err: 0 })); 
@@ -471,10 +499,10 @@ app.put('/profile/removefriend/', jsonParser, authenticateToken, (req, res) => {
     let sqlQuery = `
         DELETE
         FROM friends
-        WHERE first_user_id = ${req.user.userID}
-        AND second_user_id = ${req.body.addFriendID};
+        WHERE first_user_id = ${req.body.addFriendID}
+        AND second_user_id = ${req.user.userID};
     `; 
-    db.query(sqlQuery.then(() => res.json({ err: 0 }))); 
+    db.query(sqlQuery).then(() => res.json({ err: 0 })); 
 }); 
 
 app.put('/profile/addarchived/', jsonParser, authenticateToken, (req, res) => {
@@ -494,19 +522,19 @@ app.put('/profile/addarchived/', jsonParser, authenticateToken, (req, res) => {
 app.put('/profile/removearchived/', jsonParser, authenticateToken, (req, res) => {
     let sqlQuery = `
         DELETE
-        FROM friends
-        WHERE first_user_id = ${req.user.userID}
-        AND second_user_id = ${req.body.partyID};
+        FROM archived_parties
+        WHERE user_id = ${req.user.userID}
+        AND party_id = ${req.body.partyID};
     `; 
     db.query(sqlQuery).then(() => res.json({ err: 0 })); 
 }); 
 
-app.get('/profile/issaved', jsonParser, authenticateToken, (req, res) => {
+app.get('/profile/issaved/:id', jsonParser, authenticateToken, (req, res) => {
     let sqlQuery = `
         SELECT *
         FROM archived_parties
         WHERE user_id = ${req.user.userID}
-        AND party_id = ${req.body.partyID}; 
+        AND party_id = ${req.params.id}; 
     `; 
     db.query(sqlQuery)
         .then(result => {
@@ -517,12 +545,12 @@ app.get('/profile/issaved', jsonParser, authenticateToken, (req, res) => {
         }); 
 }); 
 
-app.get('/profile/isfriend', jsonParser, authenticateToken, (req, res) => {
+app.get('/profile/isfriend/:id', jsonParser, authenticateToken, (req, res) => {
     let sqlQuery = `
         SELECT *
         FROM friends
-        WHERE first_user_id = ${req.user.userID}
-        AND second_user_id = ${req.body.addFriendID}; 
+        WHERE first_user_id = ${req.params.id}
+        AND second_user_id = ${req.user.userID}; 
     `; 
     db.query(sqlQuery)
         .then(result => {
@@ -531,13 +559,6 @@ app.get('/profile/isfriend', jsonParser, authenticateToken, (req, res) => {
                 msg: result.length === 1
             }); 
         }); 
-}); 
-
-app.get('/profile/ismyaccount', jsonParser, authenticateToken, (req, res) => {
-    res.json({
-        err: 0,
-        msg: req.user.userID === req.body.userID
-    });
 }); 
 
 app.listen(PORT_SERVER);

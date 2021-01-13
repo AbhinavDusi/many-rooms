@@ -26,8 +26,7 @@ export default class FloorListItem extends Component {
 
     componentDidMount() {
         const pStyle = {...this.state.pStyle}; 
-        const split = window.location.pathname.split('/'); 
-        if (split[2] === this.props.floorItem.url) {
+        if (window.location.pathname === this.props.floorItem.url) {
             pStyle.fontWeight = 'bold';
         } else {
             pStyle.fontWeight = 'normal';

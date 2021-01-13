@@ -14,7 +14,7 @@ export default class FloorScreen extends Component {
         rooms: [],
         startBox: 0,
         searchValue: '',
-        sortBy: 'New'
+        sortBy: 'Old'
     }
 
     handleSearch = () => {
@@ -89,13 +89,27 @@ export default class FloorScreen extends Component {
         }  
     }
 
+    sortByTime = (a, b) => {
+        return a.props.id - b.props.id; 
+    }
+
+    sortByTrending = (a, b) => {
+        return b.props.attendees * b.props.posts - a.props.attendees * a.props.posts; 
+    }
+
     handleSortBy = () => {
         if (this.state.sortBy === 'New') {
-
+            const rooms = [...this.state.allRooms]; 
+            rooms.sort(this.sortByTime).reverse();
+            this.setState({rooms});
         } else if (this.state.sortBy === 'Old') {
-
+            const rooms = [...this.state.allRooms]; 
+            rooms.sort(this.sortByTime); 
+            this.setState({rooms});
         } else {
-            
+            const rooms = [...this.state.allRooms]; 
+            rooms.sort(this.sortByTrending); 
+            this.setState({rooms}); 
         }
     }
 
@@ -104,7 +118,8 @@ export default class FloorScreen extends Component {
         fetch(window.location.pathname)
             .then(res => res.json())
             .then(res => {
-                res.forEach(room => rooms.push(
+                res.forEach(room => {
+                    rooms.push(
                     <PartyBox 
                         key = {room.id}
                         id = {room.id}
@@ -114,8 +129,9 @@ export default class FloorScreen extends Component {
                         posts = {room.posts}
                         attendees = {room.attendees}
                         tags = {room.tags}
+                        startTime = {room.start_time}
                     /> 
-                )); 
+                )}); 
                 this.setState({rooms, allRooms: [...rooms]});
             })
             .catch(error => {
@@ -153,14 +169,14 @@ export default class FloorScreen extends Component {
                         Sort by:
                         <select 
                             style = {{marginLeft: '15px', ...selectStyle}}
-                            onChange = {e => {
+                            onChange = {async e => {
+                                await this.setState({sortBy: e.target.value}); 
                                 this.handleSortBy(); 
-                                this.setState({sortBy: e.target.value}); 
                             }}
                             value = {this.state.sortBy}
                         >
-                            <option>New</option>
                             <option>Old</option>
+                            <option>New</option>
                             <option>Trending</option>
                         </select>
                     </p>

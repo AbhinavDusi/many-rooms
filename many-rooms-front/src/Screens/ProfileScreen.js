@@ -3,7 +3,7 @@ import { outerDivStyle, innerDivStyle, mainHeader, infoText, boxWrapper,
     buttonStyle } from './ScreenStyles';
 import ProfilePrevNextButtons from './ProfilePrevNextButtons';
 import EmptyBox from './Boxes/EmptyBox';
-import { getUserInfo } from '../UserInfo';
+import { getUserID, getUserInfo } from '../UserInfo';
 
 export default class ProfileScreen extends Component {
     state = {
@@ -27,7 +27,11 @@ export default class ProfileScreen extends Component {
 
     handleFriend = () => {
         if (this.state.friendAdded) {
-            fetch ('/profile/removefriend')
+            fetch ('/profile/removefriend', {
+                'method': 'PUT',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({ addFriendID: this.state.userID })
+            })
                 .then(res => res.json())
                 .then(res => {
                     if (res.err === 1) {
@@ -35,7 +39,11 @@ export default class ProfileScreen extends Component {
                     } 
                 }); 
         } else {
-            fetch ('/profile/addfriend')
+            fetch ('/profile/addfriend', {
+                'method': 'PUT',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({ addFriendID: this.state.userID })
+            })
                 .then(res => res.json())
                 .then(res => {
                     if (res.err === 1) {
@@ -109,11 +117,15 @@ export default class ProfileScreen extends Component {
         this.setState({friendsStart: this.state.friendsStart - 5});
     }
 
-    componentDidMount() {
-        getUserInfo(window.location.pathname).then(result => {
+    async componentDidMount() {
+        await getUserInfo(window.location.pathname).then(result => {
             const { userID, username, previousParties, archivedParties, friends } = result; 
             this.setState({userID, username, previousParties, archivedParties, friends});
         }); 
+        await this.setState({myAccount: getUserID() === this.state.userID.toString()}); 
+        await fetch ('/profile/isfriend/' + this.state.userID)
+            .then(res => res.json())
+            .then(res => this.setState({ friendAdded: res.msg }));
     }
 
     render() {
