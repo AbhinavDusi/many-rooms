@@ -501,4 +501,43 @@ app.put('/profile/removearchived/', jsonParser, authenticateToken, (req, res) =>
     db.query(sqlQuery).then(() => res.json({ err: 0 })); 
 }); 
 
+app.get('/profile/issaved', jsonParser, authenticateToken, (req, res) => {
+    let sqlQuery = `
+        SELECT *
+        FROM archived_parties
+        WHERE user_id = ${req.user.userID}
+        AND party_id = ${req.body.partyID}; 
+    `; 
+    db.query(sqlQuery)
+        .then(result => {
+            res.json({
+                err: 0,
+                msg: result.length === 1
+            }); 
+        }); 
+}); 
+
+app.get('/profile/isfriend', jsonParser, authenticateToken, (req, res) => {
+    let sqlQuery = `
+        SELECT *
+        FROM friends
+        WHERE first_user_id = ${req.user.userID}
+        AND second_user_id = ${req.body.addFriendID}; 
+    `; 
+    db.query(sqlQuery)
+        .then(result => {
+            res.json({
+                err: 0,
+                msg: result.length === 1
+            }); 
+        }); 
+}); 
+
+app.get('/profile/ismyaccount', jsonParser, authenticateToken, (req, res) => {
+    res.json({
+        err: 0,
+        msg: req.user.userID === req.body.userID
+    });
+}); 
+
 app.listen(PORT_SERVER);
