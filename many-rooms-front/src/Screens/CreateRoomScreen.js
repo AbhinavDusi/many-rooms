@@ -33,6 +33,10 @@ export default class CreateRoomScreen extends Component {
             .then(res => res.json())
             .then(result => {
                 if (result.err === 1) {
+                    document.cookie = 'username=;path=/';
+                    document.cookie = 'sid=;path=/';
+                    window.location.pathname = '';
+                } else if (result.err === 2) {
                     this.setState({errMsg: result.msg});
                 } else {
                     window.location.pathname = '/p/' + result.msg.partyID;

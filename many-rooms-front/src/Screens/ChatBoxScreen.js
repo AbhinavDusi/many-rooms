@@ -27,7 +27,30 @@ export default class ChatBoxScreen extends Component {
         }
     }
 
+    handleLogOut = () => {
+        document.cookie = 'username=;path=/';
+        document.cookie = 'sid=;path=/';
+        window.location.pathname = '';
+    }
+
     handleSave = () => {
+        if (this.state.saved) {
+            fetch ('/profile/removearchived')
+                .then(res => res.json())
+                .then(res => {
+                    if (res.err === 1) {
+                        this.handleLogOut();
+                    } 
+                }); 
+        } else {
+            fetch ('/profile/addarchived')
+                .then(res => res.json())
+                .then(res => {
+                    if (res.err === 1) {
+                        this.handleLogOut();
+                    } 
+                }); 
+        }
         this.setState({saved: !this.state.saved}); 
     }
 

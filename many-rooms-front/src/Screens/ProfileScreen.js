@@ -25,7 +25,24 @@ export default class ProfileScreen extends Component {
         window.location.pathname = '';
     }
 
-    handleAddFriend = () => {
+    handleFriend = () => {
+        if (this.state.friendAdded) {
+            fetch ('/profile/removefriend')
+                .then(res => res.json())
+                .then(res => {
+                    if (res.err === 1) {
+                        this.handleLogOut();
+                    } 
+                }); 
+        } else {
+            fetch ('/profile/addfriend')
+                .then(res => res.json())
+                .then(res => {
+                    if (res.err === 1) {
+                        this.handleLogOut();
+                    } 
+                }); 
+        }
         this.setState({friendAdded: !this.state.friendAdded});
     }
 
@@ -34,7 +51,7 @@ export default class ProfileScreen extends Component {
             return (
                 <button 
                     style = {buttonStyle}
-                    onClick = {this.handleAddFriend}
+                    onClick = {this.handleFriend}
                 >
                     {this.state.friendAdded ? 'Remove ' : 'Add '}Friend
                 </button>

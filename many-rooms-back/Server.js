@@ -256,25 +256,25 @@ const authenticateToken = (req, res, next) => {
 app.post('/createparty', jsonParser, authenticateToken, (req, res) => {
     if (req.body.titleValue.length < 5) {
         res.json({
-            err: 1,
+            err: 2,
             msg: 'The title is too short.'
         });
         return;
     } else if (req.body.titleValue.length > 25) {
         res.json({
-            err: 1,
+            err: 2,
             msg: 'The title is too long.'
         });
         return;
     } else if (req.body.bodyValue.length < 25) {
         res.json({
-            err: 1,
+            err: 2,
             msg: 'The body is too short.'
         }); 
         return;
     } else if (req.body.bodyValue.length > 500) {
         res.json({
-            err: 1,
+            err: 2,
             msg: 'The body is too long.'
         }); 
         return; 
@@ -291,7 +291,7 @@ app.post('/createparty', jsonParser, authenticateToken, (req, res) => {
             time_limit
         )
         VALUES (
-            ${1},
+            ${req.user.userID},
             '${req.body.titleValue}',
             ${1},
             ${1},
@@ -384,7 +384,7 @@ app.post('/login', jsonParser, async (req, res) => {
                 const hashedPassword = result[0].password;
                 bcrypt.compare(req.body.password, hashedPassword).then(valid => {
                     if (valid) {
-                        const user = { email: req.body.email }; 
+                        const user = { email: req.body.email, userID: result[0].user_id }; 
                         const accessToken = jwt.sign(user, process.env.ACCESS_TOKEN_SECRET);
                         res.json({
                             err: 0,
@@ -450,23 +450,55 @@ app.put('/settings/updatepassword/', jsonParser, authenticateToken, async (req, 
                 }
             }); 
         }
-    }).catch(err => res.json({err: 1}));
+    }).catch(() => res.json({err: 1}));
 }); 
 
 app.put('/profile/addfriend/', jsonParser, authenticateToken, (req, res) => {
-
+    let sqlQuery = `
+        INSERT INTO friends (
+            first_user_id,
+            second_user_id
+        )
+        VALUES (
+            ${req.user.userID},
+            ${req.body.addFriendID}
+        );
+    `; 
+    db.query(sqlQuery).then(() => res.json({ err: 0 })); 
 }); 
 
 app.put('/profile/removefriend/', jsonParser, authenticateToken, (req, res) => {
-
+    let sqlQuery = `
+        DELETE
+        FROM friends
+        WHERE first_user_id = ${req.user.userID}
+        AND second_user_id = ${req.body.addFriendID};
+    `; 
+    db.query(sqlQuery.then(() => res.json({ err: 0 }))); 
 }); 
 
 app.put('/profile/addarchived/', jsonParser, authenticateToken, (req, res) => {
-
+    let sqlQuery = `
+        INSERT INTO archived_parties (
+            user_id,
+            party_id
+        )
+        VALUES (
+            ${req.user.userID},
+            ${req.body.partyID}
+        );
+    `; 
+    db.query(sqlQuery).then(() => res.json({ err: 0 })); 
 }); 
 
 app.put('/profile/removearchived/', jsonParser, authenticateToken, (req, res) => {
-
+    let sqlQuery = `
+        DELETE
+        FROM friends
+        WHERE first_user_id = ${req.user.userID}
+        AND second_user_id = ${req.body.partyID};
+    `; 
+    db.query(sqlQuery).then(() => res.json({ err: 0 })); 
 }); 
 
-app.listen(PORT_SERVER)
+app.listen(PORT_SERVER);
