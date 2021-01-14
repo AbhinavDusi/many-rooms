@@ -6,6 +6,7 @@ const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const cookieParser = require('cookie-parser');
 require('dotenv').config();
+const nodemailer = require('nodemailer'); 
 
 const PORT_SERVER = 5000; 
 const PORT_WEBSOCKET = 5002; 
@@ -35,6 +36,17 @@ class Database {
             }); 
         }); 
     }
+}
+
+const authenticateToken = (req, res, next) => {
+    jwt.verify(req.cookies.sid, process.env.ACCESS_TOKEN_SECRET, (err, user) => {
+        if (err) {
+            res.json({err: 1}); 
+        } else {
+            req.user = user;
+            next();
+        }
+    });
 }
 
 const db = new Database(dbConfig); 
@@ -173,6 +185,24 @@ io.on('connection', socket => {
     }); 
 }); 
 
+app.post('/support/sendticket', jsonParser, authenticateToken, async (req, res) => {
+    let transporter = nodemailer.createTransport({
+        service: 'gmail',
+        secure: false,
+        auth: {
+            user: 'manyroomshelp@gmail.com',
+            pass: 'MANYROOMSPASSWORD'
+        },
+    });
+    await transporter.sendMail({
+        from: 'manyroomshelp@gmail.com', 
+        to: "manyroomshelp@gmail.com",
+        subject: req.body.subject, 
+        text: req.user.userID + ' says: ' + req.body.body
+    });
+   res.json({ err: 0 });
+}); 
+
 app.get('/p/:id', (req, res) => {
     let sqlQuery = `
         SELECT 
@@ -269,17 +299,6 @@ app.get('/profile/:id', (req, res) => {
         db.query(sqlQueryFriends)
     ]).then(result => res.json(result));
 }); 
-
-const authenticateToken = (req, res, next) => {
-    jwt.verify(req.cookies.sid, process.env.ACCESS_TOKEN_SECRET, (err, user) => {
-        if (err) {
-            res.json({err: 1}); 
-        } else {
-            req.user = user;
-            next();
-        }
-    });
-}
 
 app.post('/createparty', jsonParser, authenticateToken, (req, res) => {
     if (req.body.titleValue.length < 5) {

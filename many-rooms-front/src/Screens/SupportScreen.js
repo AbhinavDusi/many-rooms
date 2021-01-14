@@ -12,6 +12,22 @@ export default class SupportScreen extends Component {
     }
 
     handleSend = () => {
+        fetch('/support/sendticket', {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({
+                body: this.state.supportValue,
+                subject: this.state.messageType
+            })
+        })
+            .then(res => res.json())
+            .then(res => {
+                if (res.err === 1) {
+                    document.cookie = 'username=;path=/';
+                    document.cookie = 'sid=;path=/';
+                    window.location.pathname = '';
+                }
+            })
         this.setState({supportValue: ''});
     }
 
@@ -61,8 +77,8 @@ export default class SupportScreen extends Component {
                     </p>
                     <textarea 
                         style = {textAreaStyle}
-                        value = ''
-                        onChange = {e => this.setState({chatBoxValue: e.target.value})}
+                        value = {this.state.supportValue}
+                        onChange = {e => this.setState({supportValue: e.target.value})}
                     />
                     <button 
                         style = {{marginTop: '15px', ...buttonStyle}}
