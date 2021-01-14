@@ -1,8 +1,0 @@
-PUT http://localhost:5000/settings/updatedisplayname
-Content-Type: application/json
-
-{
-    "newName": "NewUsername",
-    "userID": "14",
-    "password": "6Fsb2002"
-}
