@@ -17,7 +17,7 @@ the option to save and archive all or parts of your discussions.
 
 ## Technologies Used
 * HTML/CSS (for front-end)
-* React (for UI components)
+* React JS/JSX (for UI components)
 * Express (for server)
 * SocketIO (for websocket)
 * MySQL/SQL (for database and queries)
