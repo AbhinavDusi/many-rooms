@@ -27,7 +27,7 @@ the option to save and archive all or parts of your discussions.
 ## Screenshots
 
 ### Authentication
-
+(https://raw.github.com/AbhinavDusi/many-rooms/master/Screenshots/Authentication.png)
 ### The list of "floors"
 
 ### The history "floor" with open "parties"
