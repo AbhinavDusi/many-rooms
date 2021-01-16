@@ -29,11 +29,12 @@ the option to save and archive all or parts of your discussions.
 ### Authentication
 ![ScreenShot](https://raw.github.com/AbhinavDusi/many-rooms/master/Screenshots/Authentication.png)
 ### The list of "floors"
-
+![ScreenShot](https://raw.github.com/AbhinavDusi/many-rooms/master/Screenshots/Floor%20List.png)
 ### The history "floor" with open "parties"
-
+![ScreenShot](https://raw.github.com/AbhinavDusi/many-rooms/master/Screenshots/Floor%20Screen.png)
 ### Joining a party; can chat with others and save party to profile
-
+![ScreenShot](https://raw.github.com/AbhinavDusi/many-rooms/master/Screenshots/Chat%20Screen.png)
 ### Creating a "party"
-
+![ScreenShot](https://raw.github.com/AbhinavDusi/many-rooms/master/Screenshots/Create%20Room.png)
 ### My Profile; can view my previous parties, archived parties, and friends
+![ScreenShot](https://raw.github.com/AbhinavDusi/many-rooms/master/Screenshots/Profile.png)
