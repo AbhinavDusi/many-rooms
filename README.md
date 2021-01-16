@@ -1,30 +1,17 @@
 
-# Foobar
+# Many Rooms
 
-Foobar is a Python library for dealing with word pluralization.
+## Overview
+In this building there are many floors. In each floor there are many rooms. 
+In each room there is an exciting party. 
 
-## Installation
+Want to see what the buzz is on each floor? Try joining one by selecting 
+a topic, or create your own party when you get there! 
 
-Use the package manager [pip](https://pip.pypa.io/en/stable/) to install foobar.
+# About
+We believe in the importance of thoughtful discussions, and chatrooms
+provide the best opportunity for this. They occur in real time and are
+focused on centralized topics.
 
-```bash
-pip install foobar
-```
-
-## Usage
-
-```python
-import foobar
-
-foobar.pluralize('word') # returns 'words'
-foobar.pluralize('goose') # returns 'geese'
-foobar.singularize('phenomena') # returns 'phenomenon'
-```
-
-## Contributing
-Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
-
-Please make sure to update tests as appropriate.
-
-## License
-[MIT](https://choosealicense.com/licenses/mit/)
+Having a meaningful conversation is like striking gold, so we give you
+the option to save and archive all or parts of your discussions. 
