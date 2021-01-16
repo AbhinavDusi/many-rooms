@@ -1,4 +1,3 @@
-
 # Many Rooms
 
 ## Overview
@@ -22,3 +21,19 @@ the option to save and archive all or parts of your discussions.
 * Express (for server)
 * SocketIO (for websocket)
 * MySQL/SQL (for database and queries)
+* Bcrypt/JWT (for authentication)
+* Nodemailer (for sending emails in JS)
+
+## Screenshots
+
+### Authentication
+
+### The list of "floors"
+
+### The history "floor" with open "parties"
+
+### Joining a party; can chat with others and save party to profile
+
+### Creating a "party"
+
+### My Profile; can view my previous parties, archived parties, and friends
