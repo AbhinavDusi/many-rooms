@@ -39,5 +39,5 @@ the option to save and archive all or parts of your discussions.
 ### My Profile; can view my previous parties, archived parties, and friends
 ![ScreenShot](https://raw.github.com/AbhinavDusi/many-rooms/master/Screenshots/Profile.png)
 
-## Upcoming To Do
+## To Be Done
 Find a way to host client, server, and database. 
