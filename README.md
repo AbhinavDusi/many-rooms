@@ -38,3 +38,6 @@ the option to save and archive all or parts of your discussions.
 ![ScreenShot](https://raw.github.com/AbhinavDusi/many-rooms/master/Screenshots/Create%20Room.png)
 ### My Profile; can view my previous parties, archived parties, and friends
 ![ScreenShot](https://raw.github.com/AbhinavDusi/many-rooms/master/Screenshots/Profile.png)
+
+## Upcoming To Do
+Find a way to host client, server, and database. 
