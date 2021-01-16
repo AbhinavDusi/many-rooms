@@ -17,8 +17,8 @@ Having a meaningful conversation is like striking gold, so we give you
 the option to save and archive all or parts of your discussions. 
 
 ## Technologies Used
-* React (for front-end)
-* Node JS
+* HTML/CSS (for front-end)
+* React (for UI components)
 * Express (for server)
 * SocketIO (for websocket)
-* SQL (for database queries)
+* MySQL/SQL (for database and queries)
